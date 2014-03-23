@@ -1,0 +1,10 @@
+gcc -Wall -I/usr/include/ -I../oxygarum/include -o src/main.o -L/usr/X11R6/lib  -c src/main.cpp 
+In file included from src/main.cpp:19:0:
+../oxygarum/include/oxygarum.h:64:1: Warnung: »typedef« wurde in dieser Deklaration ignoriert [standardmäßig aktiviert]
+ };
+ ^
+src/main.cpp: In Funktion »int main(int, char**)«:
+src/main.cpp:40:11: Warnung: Variable »frametime« wird nicht verwendet [-Wunused-variable]
+     float frametime = oxygarum_update();
+           ^
+gcc -o pong src/main.o -L/usr/X11R6/lib -lX11 -lSDL2 -lGL -lGLU -lm -lSDL2_image ../oxygarum/src/oxygarum.a

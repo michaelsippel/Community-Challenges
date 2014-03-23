@@ -1,0 +1,10 @@
+*.o
+*.c~
+*.cpp~
+*.h~
+makefile~
+Makefile~
+makefile.linux~
+makefile.win32~
+.gitignore~
+pong
