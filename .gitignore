@@ -2,9 +2,11 @@
 *.c~
 *.cpp~
 *.h~
+*.oxy3d~
 makefile~
 Makefile~
 makefile.linux~
 makefile.win32~
 .gitignore~
 pong
+

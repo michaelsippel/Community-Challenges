@@ -27,12 +27,17 @@ int main(int argc, char **argv) {
   // setup
   screen_t *screen = oxygarum_create_screen();
   scene_t *scene = oxygarum_create_scene();
-  
-  screen->camera->pos.x = 0;
-  screen->camera->pos.y = 0;
-  screen->camera->pos.z = -3;  
-  
   screen->scene = scene;
+  screen->camera->pos.z = -10.0;
+  screen->camera->pos.y = -3.0;
+  
+  // load mesh and create object
+  struct load_return *ret = oxygarum_load_oxy3d_file("data/scene.oxy3d", NULL);
+  
+  object3d_t *plasma = oxygarum_create_object3d();
+  plasma->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "ball")->element;
+  plasma->status = OBJECT_VISIBLE | OBJECT_TRANSPARENT;
+  oxygarum_group_add(scene->objects3d, plasma, NULL);
   
   // main loop
   while(1) {
@@ -45,4 +50,3 @@ int main(int argc, char **argv) {
   
   return 0;
 }
-

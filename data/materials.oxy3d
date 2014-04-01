@@ -1,0 +1,21 @@
+texture texture_ball
+path data/textures/ball.png
+
+texture texture_racket
+path data/textures/racket.png
+
+texture texture_plasma
+path data/textures/plasma.png
+
+
+material material_ball
+c ffffff 1.0 texture_ball
+
+material material_racket
+c ffffff 1.0 texture_racket
+
+material material_plasma_red
+c ff1100 1.0 texture_plasma
+
+material material_plasma_blue
+c 0011ff 1.0 texture_plasma
