@@ -1,11 +1,11 @@
 SRCS = $(shell find -name '*.cpp')
 OBJS = $(addsuffix .o,$(basename $(SRCS)))
 
-INCLUDE = -I/usr/include/ -I../oxygarum/include
+INCLUDE = -I/usr/include/ -I../oxygarum/include -Iinclude
 LIBDIR  = -L/usr/X11R6/lib 
 LIBRARIES = -lX11 -lSDL2 -lGL -lGLU -lm -lSDL2_image
 
-CC = gcc
+CC = g++
 CFLAGS = -Wall $(INCLUDE)
 OXY = ../oxygarum/src/oxygarum.a
 BIN = pong

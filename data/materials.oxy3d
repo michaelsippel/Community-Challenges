@@ -7,12 +7,14 @@ path data/textures/racket.png
 texture texture_plasma
 path data/textures/plasma.png
 
-
 material material_ball
 c ffffff 1.0 texture_ball
 
-material material_racket
-c ffffff 1.0 texture_racket
+material material_racket_red
+c cc1100 1.0 texture_racket
+
+material material_racket_blue
+c 0011cc 1.0 texture_racket
 
 material material_plasma_red
 c ff1100 1.0 texture_plasma

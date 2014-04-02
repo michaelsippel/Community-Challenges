@@ -10,11 +10,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/micha/Projects/pong/data/models/racket.oxy3d</file>
+            <file>file:/home/micha/Projects/pong/include/Ball.h</file>
             <file>file:/home/micha/Projects/pong/data/materials.oxy3d</file>
-            <file>file:/home/micha/Projects/pong/data/models/ball.oxy3d</file>
-            <file>file:/home/micha/Projects/pong/data/scene.oxy3d</file>
+            <file>file:/home/micha/Projects/pong/src/Player.cpp</file>
+            <file>file:/home/micha/Projects/pong/src/Ball.cpp</file>
             <file>file:/home/micha/Projects/pong/src/main.cpp</file>
+            <file>file:/home/micha/Projects/pong/include/Player.h</file>
         </group>
     </open-files>
 </project-private>
