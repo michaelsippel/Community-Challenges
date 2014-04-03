@@ -12,8 +12,8 @@ Ball::Ball() {
     this->object = oxygarum_create_object3d();
     this->pos.x = 0;
     this->pos.y = 0;
-    this->velocity.x = 0.01;
-    this->velocity.y = 0.005;
+    this->velocity.x = 0.05;
+    this->velocity.y = 0.01;
 }
 
 Ball::Ball(const Ball& orig) {
@@ -26,11 +26,11 @@ void Ball::update(float speed) {
     this->pos.x += this->velocity.x * speed;
     this->pos.y += this->velocity.y * speed;
     
-    if(this->pos.x > 20 || this->pos.x < -20) {
+    if(this->pos.x > 20.0f || this->pos.x < -20.0f) {
         this->velocity.x *= -1.0f;
     }
     
-    if(this->pos.y > 10 || this->pos.y < -10) {
+    if(this->pos.y > 15.0f || this->pos.y < -15.0f) {
         this->velocity.y *= -1.0f;
     }
     

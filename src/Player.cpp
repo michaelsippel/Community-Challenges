@@ -22,6 +22,27 @@ Player::Player(const Player& orig) {
 Player::~Player() {
 }
 
+void Player::move(int v) {
+    switch(v) {
+        case -1:
+            this->velocity = -0.03;
+            break;
+        case 0:
+            this->velocity = 0;
+            break;
+        case 1:
+            this->velocity = 0.03;
+            break;
+    }
+}
+
+void Player::update(float speed) {
+    this->racket->pos.z += this->velocity * speed;
+    if(this->racket->pos.z < -15.0f || this->racket->pos.z > 15.0f) {
+        this->velocity = 0;
+    }
+}
+
 int Player::check_collision(Ball *ball) {
     
 }

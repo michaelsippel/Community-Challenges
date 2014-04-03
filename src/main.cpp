@@ -54,6 +54,7 @@ int main(int argc, char **argv) {
     ball->object->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "ball")->element;
 
     Player *p1 = new Player();
+    p1->move(1);
     p1->racket->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "racket")->element;
     p1->racket->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_racket_red")->element;
     p1->racket->pos.x = -20;
@@ -62,14 +63,14 @@ int main(int argc, char **argv) {
     p1->plasma1->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "plasma")->element;
     p1->plasma1->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_plasma_red")->element;
     p1->plasma1->status |= OBJECT_TRANSPARENT;
-    p1->plasma1->pos.x = -21;
-    p1->plasma1->pos.z = -10;
+    p1->plasma1->pos.x = -25;
+    p1->plasma1->pos.z = -18;
 
     p1->plasma2->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "plasma")->element;
     p1->plasma2->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_plasma_red")->element;
     p1->plasma2->status |= OBJECT_TRANSPARENT;
-    p1->plasma2->pos.x = -21;
-    p1->plasma2->pos.z = 10;
+    p1->plasma2->pos.x = -25;
+    p1->plasma2->pos.z = 20;
 
 
     Player *p2 = new Player();
@@ -81,22 +82,22 @@ int main(int argc, char **argv) {
     p2->plasma1->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "plasma")->element;
     p2->plasma1->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_plasma_blue")->element;
     p2->plasma1->status |= OBJECT_TRANSPARENT;
-    p2->plasma1->pos.x = 21;
-    p2->plasma1->pos.z = -10;
+    p2->plasma1->pos.x = 25;
+    p2->plasma1->pos.z = -20;
 
     p2->plasma2->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "plasma")->element;
     p2->plasma2->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_plasma_blue")->element;
     p2->plasma2->status |= OBJECT_TRANSPARENT;
-    p2->plasma2->pos.x = 21;
-    p2->plasma2->pos.z = 10;
+    p2->plasma2->pos.x = 25;
+    p2->plasma2->pos.z = 20;
 
     oxygarum_group_add(scene->objects3d, ball->object, NULL);
     oxygarum_group_add(scene->objects3d, p1->racket, NULL);
-    // oxygarum_group_add(scene->objects3d, p1->plasma1, NULL);
-    // oxygarum_group_add(scene->objects3d, p1->plasma2, NULL);
+    oxygarum_group_add(scene->objects3d, p1->plasma1, NULL);
+    oxygarum_group_add(scene->objects3d, p1->plasma2, NULL);
     oxygarum_group_add(scene->objects3d, p2->racket, NULL);
-    // oxygarum_group_add(scene->objects3d, p2->plasma1, NULL);
-    // oxygarum_group_add(scene->objects3d, p2->plasma2, NULL);
+    oxygarum_group_add(scene->objects3d, p2->plasma1, NULL);
+    oxygarum_group_add(scene->objects3d, p2->plasma2, NULL);
 
     SDL_ShowCursor(0);
     float a1 = 0, a2 = 0;
@@ -107,7 +108,10 @@ int main(int argc, char **argv) {
         float frametime = oxygarum_update();
 
         ball->update(frametime);
+        p1->update(frametime);
+        p2->update(frametime);
 
+        // mouse control
         int mx, my;
         int buttons = SDL_GetMouseState(&mx, &my);
         float dist = 30;
@@ -120,7 +124,6 @@ int main(int argc, char **argv) {
         screen->camera->pos.x = sin(deg2rad(a1)) * dist;
         screen->camera->pos.y = -cos(deg2rad(a2)) * dist;
         screen->camera->pos.z = -cos(deg2rad(a1)) * dist;
-
 
         // render
         oxygarum_render_screen(screen);

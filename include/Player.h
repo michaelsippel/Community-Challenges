@@ -17,13 +17,21 @@ public:
     Player(const Player& orig);
     virtual ~Player();
     
+    void move(int v);
+    
     int check_collision(Ball *ball);
+    void update(float speed);
+    float get_pos();
+    
     object3d_t *racket;
     object3d_t *plasma1;
     object3d_t *plasma2;
+    
 private:
     float power;
     int score;
+    
+    float velocity;
 };
 
 #endif	/* PLAYER_H */
