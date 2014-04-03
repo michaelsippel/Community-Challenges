@@ -22,6 +22,7 @@ public:
     int check_collision(Ball *ball);
     void update(float speed);
     float get_pos();
+    float get_power();
     
     object3d_t *racket;
     object3d_t *plasma1;

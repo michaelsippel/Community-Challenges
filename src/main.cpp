@@ -27,6 +27,9 @@ const float pi = 3.14159265358979f;
 Player *p1;
 Player *p2;
 
+char s_energy1[64];
+char s_energy2[64];
+
 float rad2deg(float rad) {
     return (rad / pi) * 180.0f;
 }
@@ -111,20 +114,45 @@ int main(int argc, char **argv) {
     oxygarum_set_keyboard_event_up('a', &controler_up);
     oxygarum_set_keyboard_event_up('d', &controler_up); 
     
+    texture_t *font_tex = oxygarum_load_texture_from_file("data/font.png", NULL);
+    font_t *font = oxygarum_create_font(font_tex, 11, 11, ' ', 14);
+    text_t *t_energy1 = oxygarum_create_text(s_energy1, font, 0, screen->height-50);
+    text_t *t_energy2 = oxygarum_create_text(s_energy2, font, screen->width-250, screen->height-50);
+    t_energy1->color.rgb.g = 0; t_energy1->color.rgb.b = 0;
+    t_energy2->color.rgb.r = 0; t_energy2->color.rgb.g = 0;
+    oxygarum_group_add(scene->texts, t_energy1, NULL);
+    oxygarum_group_add(scene->texts, t_energy2, NULL);
+    
     SDL_ShowCursor(0);
     float a1 = 0, a2 = 0;
-
+  
     glEnable(GL_CULL_FACE);
     
     // main loop
     while (1) {
         // update (calculate frametime, handle events, etc.)
         float frametime = oxygarum_update();
-
+        
         ball->update(frametime);
         p1->update(frametime);
         p2->update(frametime);
-
+        
+        int power1 = (int) p1->get_power();
+        int power2 = (int) p2->get_power();
+        sprintf(s_energy1, "%d %c%c%c%c%c%c%c%c%c%c", power1,
+                power1 / 10 ? '#' : ' ', power1 / 20 ? '#' : ' ',
+                power1 / 30 ? '#' : ' ', power1 / 40 ? '#' : ' ',
+                power1 / 50 ? '#' : ' ', power1 / 60 ? '#' : ' ',
+                power1 / 70 ? '#' : ' ', power1 / 80 ? '#' : ' ',
+                power1 / 90 ? '#' : ' ', power1 / 100 ? '#' : ' ');
+        sprintf(s_energy2, "%c%c%c%c%c%c%c%c%c%c %d",
+                power2 / 100 ? '#' : ' ', power2 / 90 ? '#' : ' ',
+                power2 / 80 ? '#' : ' ', power2 / 70 ? '#' : ' ',
+                power2 / 60 ? '#' : ' ', power2 / 50 ? '#' : ' ',
+                power2 / 40 ? '#' : ' ', power2 / 30 ? '#' : ' ',
+                power2 / 20 ? '#' : ' ', power2 / 10 ? '#' : ' ',
+                power2);
+        
         // mouse control
         int mx, my;
         int buttons = SDL_GetMouseState(&mx, &my);
