@@ -92,29 +92,15 @@ int main(int argc, char **argv) {
 
     oxygarum_group_add(scene->objects3d, ball->object, NULL);
     oxygarum_group_add(scene->objects3d, p1->racket, NULL);
-   // oxygarum_group_add(scene->objects3d, p1->plasma1, NULL);
-   // oxygarum_group_add(scene->objects3d, p1->plasma2, NULL);
+    // oxygarum_group_add(scene->objects3d, p1->plasma1, NULL);
+    // oxygarum_group_add(scene->objects3d, p1->plasma2, NULL);
     oxygarum_group_add(scene->objects3d, p2->racket, NULL);
-   // oxygarum_group_add(scene->objects3d, p2->plasma1, NULL);
-   // oxygarum_group_add(scene->objects3d, p2->plasma2, NULL);
+    // oxygarum_group_add(scene->objects3d, p2->plasma1, NULL);
+    // oxygarum_group_add(scene->objects3d, p2->plasma2, NULL);
 
-    SDL_Cursor *cursor;
-    Uint8 data[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    Uint8 mask[8] = {
-        0x81, /*10000001*/
-        0x42, /*01000010*/
-        0x24, /*00100100*/
-        0x18, /*00011000*/
-        0x18, /*00011000*/
-        0x24, /*00100100*/
-        0x42, /*01000010*/
-        0x81 /*10000001*/
-    };
-    cursor = SDL_CreateCursor(data, mask, 8, 8, 4, 4);
-    SDL_SetCursor(cursor);
+    SDL_ShowCursor(0);
+    float a1 = 0, a2 = 0;
 
-    float a1 = 0,a2 = 0;
-    
     // main loop
     while (1) {
         // update (calculate frametime, handle events, etc.)
@@ -122,22 +108,20 @@ int main(int argc, char **argv) {
 
         ball->update(frametime);
 
-        int mx,my;
+        int mx, my;
         int buttons = SDL_GetMouseState(&mx, &my);
-        if (!buttons & SDL_BUTTON_LEFT) {
-            float dist = 25;
-            
-            a1 = 180 + ((float)mx / screen->width) * 360.0f;//  * frametime;
-            a2 =   0 - ((float)my / screen->height) * 90.0f;//  * frametime;
-            screen->camera->rot.x = 90 + a2;
-            screen->camera->rot.y = a1;
-            
-            screen->camera->pos.x = sin(deg2rad(a1)) * dist;
-            screen->camera->pos.y = -cos(deg2rad(a2)) * dist;
-            screen->camera->pos.z = -cos(deg2rad(a1)) * dist;
-        }
-        
-        
+        float dist = 30;
+
+        a1 = 180 + ((float) mx / screen->width) * 360.0f; //  * frametime;
+        a2 = 0 - ((float) my / screen->height) * 90.0f; //  * frametime;
+        screen->camera->rot.x = 90 + a2;
+        screen->camera->rot.y = a1;
+
+        screen->camera->pos.x = sin(deg2rad(a1)) * dist;
+        screen->camera->pos.y = -cos(deg2rad(a2)) * dist;
+        screen->camera->pos.z = -cos(deg2rad(a1)) * dist;
+
+
         // render
         oxygarum_render_screen(screen);
     }

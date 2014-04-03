@@ -13,7 +13,7 @@ Ball::Ball() {
     this->pos.x = 0;
     this->pos.y = 0;
     this->velocity.x = 0.01;
-    this->velocity.y = 0;
+    this->velocity.y = 0.005;
 }
 
 Ball::Ball(const Ball& orig) {
@@ -25,6 +25,14 @@ Ball::~Ball() {
 void Ball::update(float speed) {
     this->pos.x += this->velocity.x * speed;
     this->pos.y += this->velocity.y * speed;
+    
+    if(this->pos.x > 20 || this->pos.x < -20) {
+        this->velocity.x *= -1.0f;
+    }
+    
+    if(this->pos.y > 10 || this->pos.y < -10) {
+        this->velocity.y *= -1.0f;
+    }
     
     this->object->pos.x = this->pos.x;
     this->object->pos.z = this->pos.y;
