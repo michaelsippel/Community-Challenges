@@ -6,13 +6,23 @@
  */
 
 #include "Controler.h"
+#include "Player.h"
 
-Controler::Controler() {
+extern Player *p1;
+
+void controler_left(void) {
+    p1->move(-1);
+}
+void controler_right(void) {
+    p1->move(1);
+}
+void controler_up(void) {
+    p1->move(0);
 }
 
-Controler::Controler(const Controler& orig) {
+void controler_click_left(void) {
+    printf("left!\n");
 }
-
-Controler::~Controler() {
+void controler_click_right(void) {
+    printf("right!\n");
 }
-

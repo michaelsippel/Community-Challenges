@@ -21,8 +21,11 @@
 
 #include "Ball.h"
 #include "Player.h"
+#include "Controler.h"
 
 const float pi = 3.14159265358979f;
+Player *p1;
+Player *p2;
 
 float rad2deg(float rad) {
     return (rad / pi) * 180.0f;
@@ -57,8 +60,7 @@ int main(int argc, char **argv) {
     Ball *ball = new Ball();
     ball->object->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "ball")->element;
 
-    Player *p1 = new Player();
-    p1->move(1);
+    p1 = new Player();
     p1->racket->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "racket")->element;
     p1->racket->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_racket_red")->element;
     p1->racket->pos.x = -20;
@@ -77,7 +79,7 @@ int main(int argc, char **argv) {
     p1->plasma2->pos.z = 20;
 
 
-    Player *p2 = new Player();
+    p2 = new Player();
     p2->racket->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "racket")->element;
     p2->racket->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_racket_blue")->element;
     p2->racket->pos.x = 20;
@@ -104,6 +106,11 @@ int main(int argc, char **argv) {
     oxygarum_group_add(scene->objects3d, p2->plasma1, NULL);
     oxygarum_group_add(scene->objects3d, p2->plasma2, NULL);
 
+    oxygarum_set_keyboard_event('a', &controler_left);
+    oxygarum_set_keyboard_event('d', &controler_right);
+    oxygarum_set_keyboard_event_up('a', &controler_up);
+    oxygarum_set_keyboard_event_up('d', &controler_up); 
+    
     SDL_ShowCursor(0);
     float a1 = 0, a2 = 0;
 
@@ -132,6 +139,13 @@ int main(int argc, char **argv) {
         screen->camera->pos.y = -cos(deg2rad(a2)) * dist;
         screen->camera->pos.z = -cos(deg2rad(a1)) * dist;
 
+        if(buttons & SDL_BUTTON(1)) {
+            controler_click_left();
+        }
+        if(buttons & SDL_BUTTON(3)) {
+            controler_click_right();
+        }
+        
         // render
         oxygarum_render_screen(screen);
     }

@@ -8,20 +8,11 @@
 #ifndef CONTROLER_H
 #define	CONTROLER_H
 
-class Controler {
-public:
-    Controler();
-    Controler(const Controler& orig);
-    virtual ~Controler();
-    
-    void left();
-    void left_up();
-    void right();
-    void right_up();
-    
-private:
-    
-};
+void controler_left(void);
+void controler_right(void);
+void controler_up(void);
+void controler_click_left(void);
+void controler_click_right(void);
 
 #endif	/* CONTROLER_H */
 

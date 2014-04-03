@@ -37,10 +37,12 @@ void Player::move(int v) {
 }
 
 void Player::update(float speed) {
-    this->racket->pos.z += this->velocity * speed;
-    if(this->racket->pos.z < -12.0f || this->racket->pos.z > 12.0f) {
-        this->velocity = 0;
+    if( (this->racket->pos.z < -12.0f && this->velocity < 0.0f) ||
+        (this->racket->pos.z >  12.0f && this->velocity > 0.0f))
+    {
+        this->velocity = 0.0f;
     }
+    this->racket->pos.z += this->velocity * speed;
 }
 
 int Player::check_collision(Ball *ball) {
