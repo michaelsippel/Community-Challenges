@@ -2,3 +2,4 @@ include data/materials.oxy3d
 include data/models/racket.oxy3d
 include data/models/ball.oxy3d
 include data/models/plasma.oxy3d
+include data/models/arena.oxy3d

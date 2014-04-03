@@ -50,6 +50,10 @@ int main(int argc, char **argv) {
     // scene setup
     struct load_return *ret = oxygarum_load_oxy3d_file("data/scene.oxy3d", NULL);
 
+    object3d_t *arena = oxygarum_create_object3d();
+    arena->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "arena")->element;
+    arena->pos.y = -1;
+    
     Ball *ball = new Ball();
     ball->object->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "ball")->element;
 
@@ -91,6 +95,7 @@ int main(int argc, char **argv) {
     p2->plasma2->pos.x = 25;
     p2->plasma2->pos.z = 20;
 
+    oxygarum_group_add(scene->objects3d, arena, NULL);
     oxygarum_group_add(scene->objects3d, ball->object, NULL);
     oxygarum_group_add(scene->objects3d, p1->racket, NULL);
     oxygarum_group_add(scene->objects3d, p1->plasma1, NULL);
@@ -102,6 +107,8 @@ int main(int argc, char **argv) {
     SDL_ShowCursor(0);
     float a1 = 0, a2 = 0;
 
+    glEnable(GL_CULL_FACE);
+    
     // main loop
     while (1) {
         // update (calculate frametime, handle events, etc.)
@@ -114,7 +121,7 @@ int main(int argc, char **argv) {
         // mouse control
         int mx, my;
         int buttons = SDL_GetMouseState(&mx, &my);
-        float dist = 30;
+        float dist = 40;
 
         a1 = 180 + ((float) mx / screen->width) * 360.0f; //  * frametime;
         a2 = 0 - ((float) my / screen->height) * 90.0f; //  * frametime;

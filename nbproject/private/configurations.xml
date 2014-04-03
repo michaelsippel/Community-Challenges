@@ -4,6 +4,7 @@
     <df root="." name="0">
       <df name="data">
         <df name="models">
+          <in>arena.oxy3d</in>
         </df>
         <df name="textures">
         </df>

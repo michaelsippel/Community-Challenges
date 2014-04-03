@@ -38,7 +38,7 @@ void Player::move(int v) {
 
 void Player::update(float speed) {
     this->racket->pos.z += this->velocity * speed;
-    if(this->racket->pos.z < -15.0f || this->racket->pos.z > 15.0f) {
+    if(this->racket->pos.z < -12.0f || this->racket->pos.z > 12.0f) {
         this->velocity = 0;
     }
 }
