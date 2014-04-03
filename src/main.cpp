@@ -17,9 +17,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <oxygarum.h>
+#include <math.h>
 
 #include "Ball.h"
 #include "Player.h"
+
+const float pi = 3.14159265358979f;
+
+float rad2deg(float rad) {
+    return (rad / pi) * 180.0f;
+}
+
+float deg2rad(float deg) {
+    return (deg / 180.0f) * pi;
+}
 
 int main(int argc, char **argv) {
     // init
@@ -31,63 +42,78 @@ int main(int argc, char **argv) {
     screen_t *screen = oxygarum_create_screen();
     scene_t *scene = oxygarum_create_scene();
     screen->width = screen->viewport.width = 1024;
-    screen->height =screen->viewport.height= 576;
+    screen->height = screen->viewport.height = 576;
     screen->scene = scene;
     screen->camera->pos.y = -25.0;
-    screen->camera->rot.x = 90;
     screen->camera->fov = 90;
-    
+
     // scene setup
     struct load_return *ret = oxygarum_load_oxy3d_file("data/scene.oxy3d", NULL);
-    
+
     Ball *ball = new Ball();
-    ball->object->mesh = (mesh3d_t*)oxygarum_get_group_entry(ret->meshes, "ball")->element;
-    
+    ball->object->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "ball")->element;
+
     Player *p1 = new Player();
     p1->racket->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "racket")->element;
     p1->racket->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_racket_red")->element;
     p1->racket->pos.x = -20;
     p1->racket->rot.y = 90;
-    
+
     p1->plasma1->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "plasma")->element;
     p1->plasma1->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_plasma_red")->element;
     p1->plasma1->status |= OBJECT_TRANSPARENT;
     p1->plasma1->pos.x = -21;
     p1->plasma1->pos.z = -10;
-    
+
     p1->plasma2->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "plasma")->element;
     p1->plasma2->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_plasma_red")->element;
     p1->plasma2->status |= OBJECT_TRANSPARENT;
     p1->plasma2->pos.x = -21;
-    p1->plasma2->pos.z =  10;
-    
-    
+    p1->plasma2->pos.z = 10;
+
+
     Player *p2 = new Player();
     p2->racket->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "racket")->element;
     p2->racket->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_racket_blue")->element;
     p2->racket->pos.x = 20;
     p2->racket->rot.y = 90;
-    
-    p2->plasma1->mesh = (mesh3d_t*)oxygarum_get_group_entry(ret->meshes, "plasma")->element;
-    p2->plasma1->material = (material_t*)oxygarum_get_group_entry(ret->materials, "material_plasma_blue")->element;
+
+    p2->plasma1->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "plasma")->element;
+    p2->plasma1->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_plasma_blue")->element;
     p2->plasma1->status |= OBJECT_TRANSPARENT;
     p2->plasma1->pos.x = 21;
     p2->plasma1->pos.z = -10;
-    
-    p2->plasma2->mesh = (mesh3d_t*)oxygarum_get_group_entry(ret->meshes, "plasma")->element;
-    p2->plasma2->material = (material_t*)oxygarum_get_group_entry(ret->materials, "material_plasma_blue")->element;
+
+    p2->plasma2->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "plasma")->element;
+    p2->plasma2->material = (material_t*) oxygarum_get_group_entry(ret->materials, "material_plasma_blue")->element;
     p2->plasma2->status |= OBJECT_TRANSPARENT;
     p2->plasma2->pos.x = 21;
-    p2->plasma2->pos.z =  10;
+    p2->plasma2->pos.z = 10;
 
-    
     oxygarum_group_add(scene->objects3d, ball->object, NULL);
     oxygarum_group_add(scene->objects3d, p1->racket, NULL);
-    oxygarum_group_add(scene->objects3d, p1->plasma1, NULL);
-    oxygarum_group_add(scene->objects3d, p1->plasma2, NULL);
+   // oxygarum_group_add(scene->objects3d, p1->plasma1, NULL);
+   // oxygarum_group_add(scene->objects3d, p1->plasma2, NULL);
     oxygarum_group_add(scene->objects3d, p2->racket, NULL);
-    oxygarum_group_add(scene->objects3d, p2->plasma1, NULL);
-    oxygarum_group_add(scene->objects3d, p2->plasma2, NULL);
+   // oxygarum_group_add(scene->objects3d, p2->plasma1, NULL);
+   // oxygarum_group_add(scene->objects3d, p2->plasma2, NULL);
+
+    SDL_Cursor *cursor;
+    Uint8 data[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    Uint8 mask[8] = {
+        0x81, /*10000001*/
+        0x42, /*01000010*/
+        0x24, /*00100100*/
+        0x18, /*00011000*/
+        0x18, /*00011000*/
+        0x24, /*00100100*/
+        0x42, /*01000010*/
+        0x81 /*10000001*/
+    };
+    cursor = SDL_CreateCursor(data, mask, 8, 8, 4, 4);
+    SDL_SetCursor(cursor);
+
+    float a1 = 0,a2 = 0;
     
     // main loop
     while (1) {
@@ -95,6 +121,22 @@ int main(int argc, char **argv) {
         float frametime = oxygarum_update();
 
         ball->update(frametime);
+
+        int mx,my;
+        int buttons = SDL_GetMouseState(&mx, &my);
+        if (!buttons & SDL_BUTTON_LEFT) {
+            float dist = 25;
+            
+            a1 = 180 + ((float)mx / screen->width) * 360.0f;//  * frametime;
+            a2 =   0 - ((float)my / screen->height) * 90.0f;//  * frametime;
+            screen->camera->rot.x = 90 + a2;
+            screen->camera->rot.y = a1;
+            
+            screen->camera->pos.x = sin(deg2rad(a1)) * dist;
+            screen->camera->pos.y = -cos(deg2rad(a2)) * dist;
+            screen->camera->pos.z = -cos(deg2rad(a1)) * dist;
+        }
+        
         
         // render
         oxygarum_render_screen(screen);
