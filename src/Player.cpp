@@ -42,21 +42,27 @@ void Player::update(float speed) {
             (this->racket->pos.z > 12.0f && this->velocity > 0.0f)) {
         this->velocity = 0.0f;
     }
-
+    
+    this->use_power(speed * 0.01);
+    
     if (power > 0.0f) {
         this->racket->pos.z += this->velocity * speed;
         if(this->velocity != 0.0f) {
-            this->power -= speed * 0.05;
+            this->use_power(- speed * 0.05);
         }
-    } else {
+    }
+}
+
+void Player::use_power(float diff) {
+    this->power += diff;
+    
+    if(this->power <= 0.0f) {
         this->power = 0.0f;
         SDL_Delay(2000);
         exit(0);
     }
-
-    if (this->power < 100.0f) {
-        this->power += speed * 0.01;
-    } else {
+    
+    if (this->power > 100.0f) {
         this->power = 100.0f;
     }
 }
@@ -66,5 +72,10 @@ float Player::get_power(void) {
 }
 
 int Player::check_collision(Ball *ball) {
-
+    if(ball->get_pos().y > this->racket->pos.z - 4 &&
+       ball->get_pos().y < this->racket->pos.z + 4) {
+        return 1;
+    } else {
+        return 0;
+    }
 }

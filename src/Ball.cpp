@@ -6,7 +6,11 @@
  */
 
 #include "Ball.h"
+#include "Player.h"
 #include <oxygarum.h>
+
+extern Player *p1;
+extern Player *p2;
 
 Ball::Ball() {
     this->object = oxygarum_create_object3d();
@@ -26,8 +30,22 @@ void Ball::update(float speed) {
     this->pos.x += this->velocity.x * speed;
     this->pos.y += this->velocity.y * speed;
     
-    if(this->pos.x > 20.0f || this->pos.x < -20.0f) {
+    if(this->pos.x < -19f && this->pos.x > -20.0f) {
+        if(p1->check_collision(this)) {
+          this->velocity.x *= -1.0f;
+        }
+    } else if(this->pos.x < -30.0f) {
         this->velocity.x *= -1.0f;
+        p1->use_power(-20.0f);
+    }
+    
+    if(this->pos.x > 19f && this->pos.x < 20.0f) {
+        if(p2->check_collision(this)) {
+          this->velocity.x *= -1.0f;
+        }
+    } else if(this->pos.x > 30.0f) {
+        this->velocity.x *= -1.0f;
+        p2->use_power(-20.0f);
     }
     
     if(this->pos.y > 15.0f || this->pos.y < -15.0f) {

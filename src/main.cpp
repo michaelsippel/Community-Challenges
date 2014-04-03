@@ -26,6 +26,7 @@
 const float pi = 3.14159265358979f;
 Player *p1;
 Player *p2;
+Ball *ball;
 
 char s_energy1[64];
 char s_energy2[64];
@@ -60,7 +61,7 @@ int main(int argc, char **argv) {
     arena->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "arena")->element;
     arena->pos.y = -1;
     
-    Ball *ball = new Ball();
+    ball = new Ball();
     ball->object->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "ball")->element;
 
     p1 = new Player();
@@ -117,7 +118,7 @@ int main(int argc, char **argv) {
     texture_t *font_tex = oxygarum_load_texture_from_file("data/font.png", NULL);
     font_t *font = oxygarum_create_font(font_tex, 11, 11, ' ', 14);
     text_t *t_energy1 = oxygarum_create_text(s_energy1, font, 0, screen->height-50);
-    text_t *t_energy2 = oxygarum_create_text(s_energy2, font, screen->width-250, screen->height-50);
+    text_t *t_energy2 = oxygarum_create_text(s_energy2, font, screen->width-400, screen->height-50);
     t_energy1->color.rgb.g = 0; t_energy1->color.rgb.b = 0;
     t_energy2->color.rgb.r = 0; t_energy2->color.rgb.g = 0;
     oxygarum_group_add(scene->texts, t_energy1, NULL);
@@ -139,18 +140,28 @@ int main(int argc, char **argv) {
         
         int power1 = (int) p1->get_power();
         int power2 = (int) p2->get_power();
-        sprintf(s_energy1, "%d %c%c%c%c%c%c%c%c%c%c", power1,
-                power1 / 10 ? '#' : ' ', power1 / 20 ? '#' : ' ',
-                power1 / 30 ? '#' : ' ', power1 / 40 ? '#' : ' ',
-                power1 / 50 ? '#' : ' ', power1 / 60 ? '#' : ' ',
-                power1 / 70 ? '#' : ' ', power1 / 80 ? '#' : ' ',
-                power1 / 90 ? '#' : ' ', power1 / 100 ? '#' : ' ');
-        sprintf(s_energy2, "%c%c%c%c%c%c%c%c%c%c %d",
-                power2 / 100 ? '#' : ' ', power2 / 90 ? '#' : ' ',
-                power2 / 80 ? '#' : ' ', power2 / 70 ? '#' : ' ',
-                power2 / 60 ? '#' : ' ', power2 / 50 ? '#' : ' ',
-                power2 / 40 ? '#' : ' ', power2 / 30 ? '#' : ' ',
-                power2 / 20 ? '#' : ' ', power2 / 10 ? '#' : ' ',
+        sprintf(s_energy1, "%d %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c|", power1,
+                power1 / 5 ? '=' : ' ', power1 / 10 ? '=' : ' ',
+                power1 / 15 ? '=' : ' ', power1 / 20 ? '=' : ' ',
+                power1 / 25 ? '=' : ' ', power1 / 30 ? '=' : ' ',
+                power1 / 35 ? '=' : ' ', power1 / 40 ? '=' : ' ',
+                power1 / 45 ? '=' : ' ', power1 / 50 ? '=' : ' ',
+                power1 / 55 ? '=' : ' ', power1 / 60 ? '=' : ' ',
+                power1 / 65 ? '=' : ' ', power1 / 70 ? '=' : ' ',
+                power1 / 75 ? '=' : ' ', power1 / 80 ? '=' : ' ',
+                power1 / 85 ? '=' : ' ', power1 / 90 ? '=' : ' ',
+                power1 / 95 ? '=' : ' ', power1 / 100 ? '=' : ' ');
+        sprintf(s_energy2, "|%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c %d",
+                power2 / 100 ? '=' : ' ', power2 / 95 ? '=' : ' ',
+                power2 / 90 ? '=' : ' ', power2 / 85 ? '=' : ' ',
+                power2 / 80 ? '=' : ' ', power2 / 75 ? '=' : ' ',
+                power2 / 70 ? '=' : ' ', power2 / 65 ? '=' : ' ',
+                power2 / 60 ? '=' : ' ', power2 / 55 ? '=' : ' ',
+                power2 / 50 ? '=' : ' ', power2 / 45 ? '=' : ' ',
+                power2 / 40 ? '=' : ' ', power2 / 35 ? '=' : ' ',
+                power2 / 30 ? '=' : ' ', power2 / 25 ? '=' : ' ',
+                power2 / 20 ? '=' : ' ', power2 / 15 ? '=' : ' ',
+                power2 / 10 ? '=' : ' ', power2 / 5 ? '=' : ' ',
                 power2);
         
         // mouse control
