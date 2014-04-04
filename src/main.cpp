@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
     float a1 = 0, a2 = 0;
 
     glEnable(GL_CULL_FACE);
-
+    
     // create bot
     AI *bot = new AI(p2, bot_strength);
     ball->reset(p1);
@@ -149,13 +149,13 @@ int main(int argc, char **argv) {
     // main loop
     while (1) {
         // update (calculate frametime, handle events, etc.)
-        float frametime = oxygarum_update();
+        float speed = oxygarum_update();
+        
+        bot->update(ball->get_pos(), speed);
 
-        bot->update(ball->get_pos(), frametime);
-
-        ball->update(frametime);
-        p1->update(frametime);
-        p2->update(frametime);
+        ball->update(speed);
+        p1->update(speed);
+        p2->update(speed);
 
         int power1 = (int) p1->get_power();
         int power2 = (int) p2->get_power();

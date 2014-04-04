@@ -51,16 +51,16 @@ void AI::update(vertex2d_t ball_pos, float speed) {
 
         float dist = 20.0f - this->strength / 2.5f;
 
-        if (this->watched_vector.x < 0.0f && ball_pos.x > dist) {
+        if (ball_pos.x > dist && ball_pos.x < 20.0f && this->watched_vector.x < 0.0f) {
             if (ball_pos.y > rpos + 3.0f) {
                 m = 1;
             } else if (ball_pos.y < rpos - 3.0f) {
                 m = -1;
             }
-        } else if (this->watched_vector.x < 0.0f && ball_pos.x > 20.0f) {
-            if (ball_pos.y < rpos + 3.0f) {
+        } else if (ball_pos.x > 20.0f) {
+            if (ball_pos.y > rpos + 3.0f) {
                 m = -1;
-            } else if (ball_pos.y > rpos - 3.0f) {
+            } else if (ball_pos.y < rpos - 3.0f) {
                 m = 1;
             }
         }
