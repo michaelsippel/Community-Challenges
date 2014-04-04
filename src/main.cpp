@@ -32,6 +32,7 @@ Ball *ball;
 char s_energy1[64];
 char s_energy2[64];
 char s_score[16];
+char s_middle[256];
 
 float rad2deg(float rad) {
     return (rad / pi) * 180.0f;
@@ -42,16 +43,20 @@ float deg2rad(float deg) {
 }
 
 int main(int argc, char **argv) {
+    float bot_strength = 0;
+    printf("Please enter Bot strength (0 - 100, 50 is optimum): ");
+    scanf("%f", &bot_strength);
+
     // init
-    oxygarum_set_resolution(1024, 576);
+    oxygarum_set_resolution(1280, 720);
     oxygarum_set_title("Pong");
     init_oxygarum();
 
     // setup
     screen_t *screen = oxygarum_create_screen();
     scene_t *scene = oxygarum_create_scene();
-    screen->width = screen->viewport.width = 1024;
-    screen->height = screen->viewport.height = 576;
+    screen->width = screen->viewport.width = 1280;
+    screen->height = screen->viewport.height = 720;
     screen->scene = scene;
     screen->camera->pos.y = -25.0;
     screen->camera->fov = 90;
@@ -62,7 +67,7 @@ int main(int argc, char **argv) {
     object3d_t *arena = oxygarum_create_object3d();
     arena->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "arena")->element;
     arena->pos.y = -1;
-    
+
     ball = new Ball();
     ball->object->mesh = (mesh3d_t*) oxygarum_get_group_entry(ret->meshes, "ball")->element;
 
@@ -115,41 +120,43 @@ int main(int argc, char **argv) {
     oxygarum_set_keyboard_event('a', &controler_left);
     oxygarum_set_keyboard_event('d', &controler_right);
     oxygarum_set_keyboard_event_up('a', &controler_up);
-    oxygarum_set_keyboard_event_up('d', &controler_up); 
-    
+    oxygarum_set_keyboard_event_up('d', &controler_up);
+
     texture_t *font_tex = oxygarum_load_texture_from_file("data/font.png", NULL);
     font_t *font = oxygarum_create_font(font_tex, 11, 11, ' ', 14);
-    text_t *t_energy1 = oxygarum_create_text(s_energy1, font, 0, screen->height-50);
-    text_t *t_energy2 = oxygarum_create_text(s_energy2, font, screen->width-400, screen->height-50);
-    text_t *t_score = oxygarum_create_text(s_score, font, screen->width/2 - 60, screen->height-50);
-    t_energy1->color.rgb.g = 0; t_energy1->color.rgb.b = 0;
-    t_energy2->color.rgb.r = 0; t_energy2->color.rgb.g = 0;
-    t_score->color.rgb.r = 0; t_score->color.rgb.b = 0;
+    text_t *t_energy1 = oxygarum_create_text(s_energy1, font, 0, screen->height - 50);
+    text_t *t_energy2 = oxygarum_create_text(s_energy2, font, screen->width - 400, screen->height - 50);
+    text_t *t_score = oxygarum_create_text(s_score, font, screen->width / 2 - 60, screen->height - 50);
+    t_energy1->color.rgb.g = 0;
+    t_energy1->color.rgb.b = 0;
+    t_energy2->color.rgb.r = 0;
+    t_energy2->color.rgb.g = 0;
+    t_score->color.rgb.r = 0;
+    t_score->color.rgb.b = 0;
     oxygarum_group_add(scene->texts, t_energy1, NULL);
     oxygarum_group_add(scene->texts, t_energy2, NULL);
     oxygarum_group_add(scene->texts, t_score, NULL);
-    
-    SDL_ShowCursor(0);
+
+    SDL_ShowCursor(1);
     float a1 = 0, a2 = 0;
-  
+
     glEnable(GL_CULL_FACE);
-    
+
     // create bot
-    AI *bot = new AI(p2, 50.0f);
-    
+    AI *bot = new AI(p2, bot_strength);
     ball->reset(p1);
-    
+
     // main loop
     while (1) {
         // update (calculate frametime, handle events, etc.)
         float frametime = oxygarum_update();
-        
+
         bot->update(ball->get_pos(), frametime);
-        
+
         ball->update(frametime);
         p1->update(frametime);
         p2->update(frametime);
-        
+
         int power1 = (int) p1->get_power();
         int power2 = (int) p2->get_power();
         sprintf(s_energy1, "%d %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c|", power1,
@@ -175,25 +182,25 @@ int main(int argc, char **argv) {
                 power2 / 20 ? '=' : ' ', power2 / 15 ? '=' : ' ',
                 power2 / 10 ? '=' : ' ', power2 / 5 ? '=' : ' ',
                 power2);
-        
-        if(power1 <= 0.0f) {
+
+        if (power1 <= 0.0f) {
             p2->score_up();
-            
+
             p1->reset();
             p2->reset();
             ball->reset(p1);
         }
-        
-        if(power2 <= 0.0f) {
+
+        if (power2 <= 0.0f) {
             p1->score_up();
-            
+
             p1->reset();
             p2->reset();
             ball->reset(p2);
         }
-        
+
         sprintf(s_score, "%d:%d", p1->get_score(), p2->get_score());
-        
+
         // mouse control
         int mx, my;
         int buttons = SDL_GetMouseState(&mx, &my);
@@ -208,13 +215,13 @@ int main(int argc, char **argv) {
         screen->camera->pos.y = -cos(deg2rad(a2)) * dist;
         screen->camera->pos.z = -cos(deg2rad(a1)) * dist;
 
-        if(buttons & SDL_BUTTON(1)) {
+        if (buttons & SDL_BUTTON(1)) {
             controler_click_left();
         }
-        if(buttons & SDL_BUTTON(3)) {
+        if (buttons & SDL_BUTTON(3)) {
             controler_click_right();
         }
-        
+
         // render
         oxygarum_render_screen(screen);
     }
