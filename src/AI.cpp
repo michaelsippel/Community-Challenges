@@ -12,7 +12,7 @@ AI::AI() {
 
 AI::AI(Player *player) {
     this->player = player;
-    this->strength = 0;
+    this->strength = 50;
 }
 
 AI::AI(Player *player, float strength) {
@@ -37,8 +37,8 @@ void AI::update(vertex2d_t ball_pos) {
     this->watched_ball_pos.x = ball_pos.x;
     this->watched_ball_pos.y = ball_pos.y;
 
-    float dist = 20.0f - this->strength / 5.0f;
-    
+    float dist = 20.0f - this->strength / 2.5f;
+
     if (this->watched_vector.x < 0.0f && ball_pos.x > dist) {
         if (ball_pos.y > rpos + 3.0f) {
             m = 1;

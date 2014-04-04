@@ -8,7 +8,6 @@
 #ifndef PLAYER_H
 #define	PLAYER_H
 
-#include "Ball.h"
 #include <oxygarum.h>
 
 class Player {
@@ -23,8 +22,11 @@ public:
     void update(float speed);
     float get_pos();
     float get_power();
+    int get_score();
+    void score_up();
     void use_power(float diff);
-
+    void reset();
+    
     object3d_t *racket;
     object3d_t *plasma1;
     object3d_t *plasma2;

@@ -31,6 +31,7 @@ Ball *ball;
 
 char s_energy1[64];
 char s_energy2[64];
+char s_score[16];
 
 float rad2deg(float rad) {
     return (rad / pi) * 180.0f;
@@ -120,10 +121,13 @@ int main(int argc, char **argv) {
     font_t *font = oxygarum_create_font(font_tex, 11, 11, ' ', 14);
     text_t *t_energy1 = oxygarum_create_text(s_energy1, font, 0, screen->height-50);
     text_t *t_energy2 = oxygarum_create_text(s_energy2, font, screen->width-400, screen->height-50);
+    text_t *t_score = oxygarum_create_text(s_score, font, screen->width/2 - 60, screen->height-50);
     t_energy1->color.rgb.g = 0; t_energy1->color.rgb.b = 0;
     t_energy2->color.rgb.r = 0; t_energy2->color.rgb.g = 0;
+    t_score->color.rgb.r = 0; t_score->color.rgb.b = 0;
     oxygarum_group_add(scene->texts, t_energy1, NULL);
     oxygarum_group_add(scene->texts, t_energy2, NULL);
+    oxygarum_group_add(scene->texts, t_score, NULL);
     
     SDL_ShowCursor(0);
     float a1 = 0, a2 = 0;
@@ -131,7 +135,9 @@ int main(int argc, char **argv) {
     glEnable(GL_CULL_FACE);
     
     // create bot
-    AI *bot = new AI(p2);
+    AI *bot = new AI(p2, 50.0f);
+    
+    ball->reset(p1);
     
     // main loop
     while (1) {
@@ -170,6 +176,23 @@ int main(int argc, char **argv) {
                 power2 / 10 ? '=' : ' ', power2 / 5 ? '=' : ' ',
                 power2);
         
+        if(power1 <= 0.0f) {
+            p2->score_up();
+            
+            p1->reset();
+            p2->reset();
+            ball->reset(p1);
+        }
+        
+        if(power2 <= 0.0f) {
+            p1->score_up();
+            
+            p1->reset();
+            p2->reset();
+            ball->reset(p2);
+        }
+        
+        sprintf(s_score, "%d:%d", p1->get_score(), p2->get_score());
         
         // mouse control
         int mx, my;

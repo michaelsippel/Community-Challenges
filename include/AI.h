@@ -18,7 +18,7 @@ public:
     AI(Player *player, float strength);
     AI(const AI& orig);
     virtual ~AI();
-    
+
     void update(vertex2d_t ball_pos);
 private:
     Player *player;

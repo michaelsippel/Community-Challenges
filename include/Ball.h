@@ -9,6 +9,7 @@
 #define	BALL_H
 
 #include <oxygarum.h>
+#include "Player.h"
 
 class Ball {
 public:
@@ -18,9 +19,13 @@ public:
     
     void update(float speed);
     vertex2d_t get_pos();
+    void reset(Player *p);
+    void launch(Player *p);
+    void stop(Player *p);
     
     object3d_t *object;
 private:
+    Player *follow;
     vertex2d_t pos;
     vector2d_t velocity;
 };

@@ -69,6 +69,19 @@ float Player::get_power(void) {
     return this->power;
 }
 
+int Player::get_score(void) {
+    return this->score;
+}
+
+void Player::score_up(void) {
+    this->score ++;
+}
+
+void Player::reset(void) {
+    this->power = 100.0f;
+    
+}
+
 int Player::check_collision(vertex2d_t ball_pos) {
     if(ball_pos.y > this->racket->pos.z - 4 &&
        ball_pos.y < this->racket->pos.z + 4) {
