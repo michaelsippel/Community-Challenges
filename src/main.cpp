@@ -49,14 +49,14 @@ int main(int argc, char **argv) {
 
     // init
     oxygarum_set_resolution(1280, 720);
-    oxygarum_set_title("Pong");
+    oxygarum_set_title("EnergyDefense - Pong");
     init_oxygarum();
 
     // setup
     screen_t *screen = oxygarum_create_screen();
     scene_t *scene = oxygarum_create_scene();
-    screen->width = screen->viewport.width = 1280;
-    screen->height = screen->viewport.height = 720;
+    screen->width = screen->viewport.width = 1366;
+    screen->height = screen->viewport.height = 768;
     screen->scene = scene;
     screen->camera->pos.y = -25.0;
     screen->camera->fov = 90;
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
     oxygarum_group_add(scene->texts, t_energy2, NULL);
     oxygarum_group_add(scene->texts, t_score, NULL);
 
-    SDL_ShowCursor(1);
+    SDL_ShowCursor(0);
     float a1 = 0, a2 = 0;
 
     glEnable(GL_CULL_FACE);

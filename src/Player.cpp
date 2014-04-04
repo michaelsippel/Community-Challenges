@@ -51,7 +51,7 @@ void Player::update(float speed) {
     if (power > 0.0f) {
         this->racket->pos.z += this->velocity * speed;
         if (this->velocity != 0.0f) {
-            this->use_power(-speed * 0.05);
+            this->use_power(-speed * 0.04);
         }
     }
 }
