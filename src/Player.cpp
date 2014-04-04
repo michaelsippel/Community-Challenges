@@ -29,13 +29,13 @@ Player::~Player() {
 void Player::move(int v) {
     switch (v) {
         case -1:
-            this->velocity = -0.03;
+            this->velocity = -0.05;
             break;
         case 0:
             this->velocity = 0;
             break;
         case 1:
-            this->velocity = 0.03;
+            this->velocity = 0.05;
             break;
     }
 }
@@ -92,8 +92,8 @@ int Player::has_ball(void) {
 int Player::check_collision(vertex2d_t ball_pos) {
     if (ball_pos.y > this->racket->pos.z - 4.0f &&
             ball_pos.y < this->racket->pos.z + 4.0f &&
-            ball_pos.x > this->racket->pos.x - 2.0f &&
-            ball_pos.x < this->racket->pos.x + 2.0f) {
+            ball_pos.x > this->racket->pos.x - 1.0f &&
+            ball_pos.x < this->racket->pos.x + 1.0f) {
         return 1;
     } else {
         return 0;

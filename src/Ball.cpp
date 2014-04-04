@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   Ball.cpp
  * Author: micha
- * 
+ *
  * Created on 1. April 2014, 17:44
  */
 
@@ -26,34 +26,34 @@ Ball::~Ball() {
 
 void Ball::update(float speed) {
     if (this->follow == NULL) {
-        // move
-        this->pos.x += this->velocity.x * speed;
-        this->pos.y += this->velocity.y * speed;
-
         // normalize velocity
         if (this->velocity.x > 0.1 ||
-                (this->velocity.x > -0.05 && this->velocity.x < 0.0f)) {
-            this->velocity.x -= 0.005 * speed;
-        } else if ((this->velocity.x < 0.05 && this->velocity.x > 0.0f) ||
+                (this->velocity.x < 0.05 && this->velocity.x > 0.0f)) {
+            this->velocity.x -= 0.002 * speed;
+        } else if ((this->velocity.x > -0.05 && this->velocity.x < 0.0f) ||
                 this->velocity.x < -0.1) {
-            this->velocity.x += 0.005 * speed;
+            this->velocity.x += 0.002 * speed;
         }
-
 
         // check collisions
         if (p1->check_collision(this->get_pos())) {
             this->velocity.x *= -1.0f;
         } else if (this->pos.x < -30.0f) {
             this->velocity.x *= -1.0f;
-            p1->use_power(-20.0f);
+            p1->use_power(-30.0f);
         }
 
         if (p2->check_collision(this->get_pos())) {
             this->velocity.x *= -1.0f;
         } else if (this->pos.x > 30.0f) {
             this->velocity.x *= -1.0f;
-            p2->use_power(-20.0f);
+            p2->use_power(-30.0f);
         }
+
+        // move
+        this->pos.x += this->velocity.x * speed;
+        this->pos.y += this->velocity.y * speed;
+
 
         if (this->pos.y > 15.0f || this->pos.y < -15.0f) {
             this->velocity.y *= -1.0f;
@@ -86,24 +86,24 @@ void Ball::reset(Player *p) {
 }
 
 void Ball::launch(Player *p) {
-    if (p->racket->pos.x < this->pos.x && this->pos.x < -10.0f) {
-        this->velocity.x += 0.2f;
+    if (p->racket->pos.x <= this->pos.x && this->pos.x < -10.0f) {
+        this->velocity.x += 0.1f;
         p->use_power(-15.0f);
-        this->velocity.y = (float) (rand() & 0xf) * 0.002;
+        this->velocity.y = (float) (rand() & 0xf) * 0.003;
         this->follow = NULL;
-    } else if (p->racket->pos.x > this->pos.x && this->pos.x > 10.0f) {
-        this->velocity.x -= 0.2f;
+    } else if (p->racket->pos.x >= this->pos.x && this->pos.x > 10.0f) {
+        this->velocity.x -= 0.1f;
         p->use_power(-15.0f);
-        this->velocity.y = (float) (rand() & 0xf) * 0.002;
+        this->velocity.y = (float) (rand() & 0xf) * 0.003;
         this->follow = NULL;
     }
 }
 
 void Ball::stop(Player *p) {
-    if (p->racket->pos.x < this->pos.x && this->pos.x < -10.0f) {
+    if (p->racket->pos.x <= this->pos.x && this->pos.x < -10.0f) {
         this->velocity.x *= 0.5;
         p->use_power(-15.0f);
-    } else if (p->racket->pos.x > this->pos.x && this->pos.x > 10.0f) {
+    } else if (p->racket->pos.x >= this->pos.x && this->pos.x > 10.0f) {
         this->velocity.x *= 0.5;
         p->use_power(-15.0f);
     }

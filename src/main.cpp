@@ -123,10 +123,11 @@ int main(int argc, char **argv) {
     oxygarum_set_keyboard_event_up('d', &controler_up);
 
     texture_t *font_tex = oxygarum_load_texture_from_file("data/font.png", NULL);
-    font_t *font = oxygarum_create_font(font_tex, 11, 11, ' ', 14);
+    font_t *font = oxygarum_create_font(font_tex, 16, 16, ' ', 14);
     text_t *t_energy1 = oxygarum_create_text(s_energy1, font, 0, screen->height - 50);
     text_t *t_energy2 = oxygarum_create_text(s_energy2, font, screen->width - 400, screen->height - 50);
     text_t *t_score = oxygarum_create_text(s_score, font, screen->width / 2 - 60, screen->height - 50);
+    text_t *t_middle = oxygarum_create_text(s_middle, font, screen->width / 2 - 100, screen->height/2 - 100);
     t_energy1->color.rgb.g = 0;
     t_energy1->color.rgb.b = 0;
     t_energy2->color.rgb.r = 0;
@@ -136,6 +137,7 @@ int main(int argc, char **argv) {
     oxygarum_group_add(scene->texts, t_energy1, NULL);
     oxygarum_group_add(scene->texts, t_energy2, NULL);
     oxygarum_group_add(scene->texts, t_score, NULL);
+    oxygarum_group_add(scene->texts, t_middle, NULL);
 
     SDL_ShowCursor(0);
     float a1 = 0, a2 = 0;
@@ -146,6 +148,8 @@ int main(int argc, char **argv) {
     AI *bot = new AI(p2, bot_strength);
     ball->reset(p1);
 
+    float time = 0;
+    
     // main loop
     while (1) {
         // update (calculate frametime, handle events, etc.)
@@ -183,9 +187,23 @@ int main(int argc, char **argv) {
                 power2 / 10 ? '=' : ' ', power2 / 5 ? '=' : ' ',
                 power2);
 
+        if(time <= 0.0f) {
+            sprintf(s_middle, "");
+            t_middle->color.rgb.r = 0;
+            t_middle->color.rgb.g = 0;
+            t_middle->color.rgb.b = 0;
+        } else {
+            time -= speed;
+        }
+        
         if (power1 <= 0.0f) {
             p2->score_up();
 
+            sprintf(s_middle, "blue scores!");
+            t_middle->color.rgb.b = 1;
+            
+            time = 2000;
+            
             p1->reset();
             p2->reset();
             ball->reset(p1);
@@ -194,6 +212,11 @@ int main(int argc, char **argv) {
         if (power2 <= 0.0f) {
             p1->score_up();
 
+            sprintf(s_middle, "red scores!");
+            t_middle->color.rgb.r = 1;
+            
+            time = 2000;
+            
             p1->reset();
             p2->reset();
             ball->reset(p2);
