@@ -6,8 +6,11 @@
  */
 
 #include "Player.h"
+#include "Ball.h"
 #include <oxygarum.h>
 #include <math.h>
+
+extern Ball *ball;
 
 Player::Player() {
     this->racket = oxygarum_create_object3d();
@@ -42,24 +45,24 @@ void Player::update(float speed) {
             (this->racket->pos.z > 12.0f && this->velocity > 0.0f)) {
         this->velocity = 0.0f;
     }
-    
+
     this->use_power(speed * 0.01);
-    
+
     if (power > 0.0f) {
         this->racket->pos.z += this->velocity * speed;
-        if(this->velocity != 0.0f) {
-            this->use_power(- speed * 0.05);
+        if (this->velocity != 0.0f) {
+            this->use_power(-speed * 0.05);
         }
     }
 }
 
 void Player::use_power(float diff) {
     this->power += diff;
-    
-    if(this->power <= 0.0f) {
+
+    if (this->power <= 0.0f) {
         this->power = 0.0f;
     }
-    
+
     if (this->power > 100.0f) {
         this->power = 100.0f;
     }
@@ -74,17 +77,23 @@ int Player::get_score(void) {
 }
 
 void Player::score_up(void) {
-    this->score ++;
+    this->score++;
 }
 
 void Player::reset(void) {
     this->power = 100.0f;
-    
+
+}
+
+int Player::has_ball(void) {
+    return ball->get_player() == this ? 1 : 0;
 }
 
 int Player::check_collision(vertex2d_t ball_pos) {
-    if(ball_pos.y > this->racket->pos.z - 4 &&
-       ball_pos.y < this->racket->pos.z + 4) {
+    if (ball_pos.y > this->racket->pos.z - 4.0f &&
+            ball_pos.y < this->racket->pos.z + 4.0f &&
+            ball_pos.x > this->racket->pos.x - 2.0f &&
+            ball_pos.x < this->racket->pos.x + 2.0f) {
         return 1;
     } else {
         return 0;

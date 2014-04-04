@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
         // update (calculate frametime, handle events, etc.)
         float frametime = oxygarum_update();
         
-        bot->update(ball->get_pos());
+        bot->update(ball->get_pos(), frametime);
         
         ball->update(frametime);
         p1->update(frametime);

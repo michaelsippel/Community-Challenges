@@ -23,6 +23,7 @@ public:
     float get_pos();
     float get_power();
     int get_score();
+    int has_ball();
     void score_up();
     void use_power(float diff);
     void reset();

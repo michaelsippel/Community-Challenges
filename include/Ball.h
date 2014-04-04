@@ -23,6 +23,8 @@ public:
     void launch(Player *p);
     void stop(Player *p);
     
+    Player *get_player();
+    
     object3d_t *object;
 private:
     Player *follow;

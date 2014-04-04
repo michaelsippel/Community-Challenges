@@ -7,8 +7,10 @@
 
 #include "Controler.h"
 #include "Player.h"
+#include "Ball.h"
 
 extern Player *p1;
+extern Ball *ball;
 
 void controler_left(void) {
     p1->move(-1);
@@ -21,8 +23,8 @@ void controler_up(void) {
 }
 
 void controler_click_left(void) {
-    printf("left!\n");
+    ball->launch(p1);
 }
 void controler_click_right(void) {
-    printf("right!\n");
+    ball->stop(p1);
 }

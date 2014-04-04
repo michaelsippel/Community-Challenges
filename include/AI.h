@@ -19,7 +19,7 @@ public:
     AI(const AI& orig);
     virtual ~AI();
 
-    void update(vertex2d_t ball_pos);
+    void update(vertex2d_t ball_pos, float speed);
 private:
     Player *player;
     float strength;
