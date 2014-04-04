@@ -16,23 +16,23 @@ public:
     Player();
     Player(const Player& orig);
     virtual ~Player();
-    
+
     void move(int v);
-    
-    int check_collision(Ball *ball);
+
+    int check_collision(vertex2d_t ball_pos);
     void update(float speed);
     float get_pos();
     float get_power();
     void use_power(float diff);
-    
+
     object3d_t *racket;
     object3d_t *plasma1;
     object3d_t *plasma2;
-    
+
 private:
     float power;
     int score;
-    
+
     float velocity;
 };
 

@@ -8,10 +8,12 @@
         </df>
       </df>
       <df name="include">
+        <in>AI.h</in>
         <in>Ball.h</in>
         <in>Controler.h</in>
       </df>
       <df name="src">
+        <in>AI.cpp</in>
         <in>Ball.cpp</in>
         <in>Controler.cpp</in>
         <in>Player.cpp</in>
@@ -57,9 +59,13 @@
       </makefileType>
       <item path="data/models/arena.oxy3d" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/AI.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/Ball.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Controler.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Ball.cpp" ex="false" tool="1" flavor2="0">
       </item>

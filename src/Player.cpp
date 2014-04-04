@@ -58,8 +58,6 @@ void Player::use_power(float diff) {
     
     if(this->power <= 0.0f) {
         this->power = 0.0f;
-        SDL_Delay(2000);
-        exit(0);
     }
     
     if (this->power > 100.0f) {
@@ -71,9 +69,9 @@ float Player::get_power(void) {
     return this->power;
 }
 
-int Player::check_collision(Ball *ball) {
-    if(ball->get_pos().y > this->racket->pos.z - 4 &&
-       ball->get_pos().y < this->racket->pos.z + 4) {
+int Player::check_collision(vertex2d_t ball_pos) {
+    if(ball_pos.y > this->racket->pos.z - 4 &&
+       ball_pos.y < this->racket->pos.z + 4) {
         return 1;
     } else {
         return 0;

@@ -17,7 +17,7 @@ Ball::Ball() {
     this->pos.x = 0;
     this->pos.y = 0;
     this->velocity.x = 0.05;
-    this->velocity.y = 0.01;
+    this->velocity.y = 0.03;
 }
 
 Ball::Ball(const Ball& orig) {
@@ -30,8 +30,8 @@ void Ball::update(float speed) {
     this->pos.x += this->velocity.x * speed;
     this->pos.y += this->velocity.y * speed;
     
-    if(this->pos.x < -19f && this->pos.x > -20.0f) {
-        if(p1->check_collision(this)) {
+    if(this->pos.x < -19.0f && this->pos.x > -20.0f) {
+        if(p1->check_collision(this->get_pos())) {
           this->velocity.x *= -1.0f;
         }
     } else if(this->pos.x < -30.0f) {
@@ -39,8 +39,8 @@ void Ball::update(float speed) {
         p1->use_power(-20.0f);
     }
     
-    if(this->pos.x > 19f && this->pos.x < 20.0f) {
-        if(p2->check_collision(this)) {
+    if(this->pos.x > 19.0f && this->pos.x < 20.0f) {
+        if(p2->check_collision(this->get_pos())) {
           this->velocity.x *= -1.0f;
         }
     } else if(this->pos.x > 30.0f) {

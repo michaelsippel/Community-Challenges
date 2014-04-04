@@ -10,11 +10,13 @@
         </df>
       </df>
       <df name="include">
+        <in>AI.h</in>
         <in>Ball.h</in>
         <in>Controler.h</in>
         <in>Player.h</in>
       </df>
       <df name="src">
+        <in>AI.cpp</in>
         <in>Ball.cpp</in>
         <in>Controler.cpp</in>
         <in>Player.cpp</in>

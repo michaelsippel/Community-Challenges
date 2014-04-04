@@ -22,6 +22,7 @@
 #include "Ball.h"
 #include "Player.h"
 #include "Controler.h"
+#include "AI.h"
 
 const float pi = 3.14159265358979f;
 Player *p1;
@@ -129,10 +130,15 @@ int main(int argc, char **argv) {
   
     glEnable(GL_CULL_FACE);
     
+    // create bot
+    AI *bot = new AI(p2);
+    
     // main loop
     while (1) {
         // update (calculate frametime, handle events, etc.)
         float frametime = oxygarum_update();
+        
+        bot->update(ball->get_pos());
         
         ball->update(frametime);
         p1->update(frametime);
@@ -163,6 +169,7 @@ int main(int argc, char **argv) {
                 power2 / 20 ? '=' : ' ', power2 / 15 ? '=' : ' ',
                 power2 / 10 ? '=' : ' ', power2 / 5 ? '=' : ' ',
                 power2);
+        
         
         // mouse control
         int mx, my;
