@@ -33,6 +33,10 @@ char s_energy1[64];
 char s_energy2[64];
 char s_score[16];
 char s_middle[256];
+text_t *t_middle;
+
+float time = 0;
+float speed = 0;
 
 float rad2deg(float rad) {
     return (rad / pi) * 180.0f;
@@ -48,15 +52,15 @@ int main(int argc, char **argv) {
     scanf("%f", &bot_strength);
 
     // init
-    oxygarum_set_resolution(1280, 720);
+    oxygarum_set_resolution(1024, 576);
     oxygarum_set_title("EnergyDefense - Pong");
     init_oxygarum();
 
     // setup
     screen_t *screen = oxygarum_create_screen();
     scene_t *scene = oxygarum_create_scene();
-    screen->width = screen->viewport.width = 1366;
-    screen->height = screen->viewport.height = 768;
+    screen->width = screen->viewport.width = 1024;
+    screen->height = screen->viewport.height = 576;
     screen->scene = scene;
     screen->camera->pos.y = -25.0;
     screen->camera->fov = 90;
@@ -127,7 +131,7 @@ int main(int argc, char **argv) {
     text_t *t_energy1 = oxygarum_create_text(s_energy1, font, 0, screen->height - 50);
     text_t *t_energy2 = oxygarum_create_text(s_energy2, font, screen->width - 400, screen->height - 50);
     text_t *t_score = oxygarum_create_text(s_score, font, screen->width / 2 - 60, screen->height - 50);
-    text_t *t_middle = oxygarum_create_text(s_middle, font, screen->width / 2 - 100, screen->height/2 - 100);
+    t_middle = oxygarum_create_text(s_middle, font, screen->width / 2 - 100, screen->height / 2 - 100);
     t_energy1->color.rgb.g = 0;
     t_energy1->color.rgb.b = 0;
     t_energy2->color.rgb.r = 0;
@@ -143,18 +147,16 @@ int main(int argc, char **argv) {
     float a1 = 0, a2 = 0;
 
     glEnable(GL_CULL_FACE);
-    
+
     // create bot
     AI *bot = new AI(p2, bot_strength);
     ball->reset(p1);
 
-    float time = 0;
-    
     // main loop
     while (1) {
         // update (calculate frametime, handle events, etc.)
-        float speed = oxygarum_update();
-        
+        speed = oxygarum_update();
+
         bot->update(ball->get_pos(), speed);
 
         ball->update(speed);
@@ -187,23 +189,25 @@ int main(int argc, char **argv) {
                 power2 / 10 ? '=' : ' ', power2 / 5 ? '=' : ' ',
                 power2);
 
-        if(time <= 0.0f) {
+        if (time <= 0.0f) {
             sprintf(s_middle, "");
-            t_middle->color.rgb.r = 0;
-            t_middle->color.rgb.g = 0;
+            t_middle->color.rgb.r = 1;
+            t_middle->color.rgb.g = 1;
             t_middle->color.rgb.b = 0;
         } else {
             time -= speed;
         }
-        
+
         if (power1 <= 0.0f) {
             p2->score_up();
 
             sprintf(s_middle, "blue scores!");
+            t_middle->color.rgb.r = 0;
+            t_middle->color.rgb.g = 0;
             t_middle->color.rgb.b = 1;
-            
+
             time = 2000;
-            
+
             p1->reset();
             p2->reset();
             ball->reset(p1);
@@ -214,9 +218,11 @@ int main(int argc, char **argv) {
 
             sprintf(s_middle, "red scores!");
             t_middle->color.rgb.r = 1;
-            
+            t_middle->color.rgb.g = 0;
+            t_middle->color.rgb.b = 0;
+
             time = 2000;
-            
+
             p1->reset();
             p2->reset();
             ball->reset(p2);

@@ -34,7 +34,7 @@ void AI::update(vertex2d_t ball_pos, float speed) {
 
     if (this->player->has_ball()) {
         time += speed;
-        if (time > 1000.0f) {
+        if (time > 2000.0f) {
             time = 0.0f;
             ball->launch(this->player);
         }
@@ -56,6 +56,12 @@ void AI::update(vertex2d_t ball_pos, float speed) {
                 m = 1;
             } else if (ball_pos.y < rpos - 3.0f) {
                 m = -1;
+            }
+
+            if (this->player->get_power() > 40.0f) {
+                if ((rand()&0xf) > 14) {
+                    ball->launch(this->player);
+                }
             }
         } else if (ball_pos.x > 20.0f) {
             if (ball_pos.y > rpos + 3.0f) {
