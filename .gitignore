@@ -3,6 +3,7 @@
 *.cpp~
 *.h~
 *.oxy3d~
+*.md~
 makefile~
 Makefile~
 makefile.linux~

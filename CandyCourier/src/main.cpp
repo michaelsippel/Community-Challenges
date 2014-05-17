@@ -26,7 +26,8 @@ int main(void)
 	camera->position = Vector3D(0.0f, 0.0f, -5.0f);
 
 	Chunk *testchunk = new Chunk();
-    int x,y;
+
+	int x,y;
 	for(x = 0; x < CHUNK_SIZE_X; x++)
 	{
 		for(y = 0; y < CHUNK_SIZE_Y; y++)
@@ -52,40 +53,17 @@ int main(void)
 
 	testchunk->generate_mesh();
 	scene->objects3D->add(testchunk->obj);
-/*
-	Vector3D vertices[4] = {
-Vector3D(-1.0f, 1.0f, 0.0f),
-Vector3D( 1.0f, 1.0f, 0.0f),
-Vector3D( 1.0f,-1.0f, 0.0f),
-Vector3D(-1.0f,-1.0f, 0.0f)
-};
 
-int indices[4] = {0, 1, 2, 3};
-Face *faces[1] = {
-new Face(4, (int*) &indices)
-};
-
-Mesh3D *mesh = new Mesh3D(4, (Vector3D*) &vertices, 1, (Face**) &faces);
-mesh->instance = new RenderInstance(mesh);
-
-Object3D *obj = new Object3D();
-obj->mesh = mesh;
-obj->setFlag(OBJECT_RENDER_VBO);
-
-obj->material = new Material(Color(1.0f, 0.0f, 0.0f, 1.0f));
-
-scene->objects3D->add(obj);
-*/
 	while(1)
 	{
-        // handle events
+		// handle events
 		eventmanager->poll_events();
 
-        // render
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// render
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera->render();
 
-        // update
+		// update
 		float frametime = window->update();
 	}
 
