@@ -7,6 +7,7 @@ using namespace oxygarum;
 
 enum block_type
 {
+	NONE,
 	STONE,
 	DIRT,
 	GRASS

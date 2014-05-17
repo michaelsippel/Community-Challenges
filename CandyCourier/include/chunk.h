@@ -16,8 +16,8 @@ class Chunk
 		~Chunk();
 	
 		enum block_type blocks[CHUNK_SIZE_X][CHUNK_SIZE_Y];
+		void generate_mesh(void);
 
-	private:
 		Mesh3D *mesh;
 		Object3D *obj;
 };
