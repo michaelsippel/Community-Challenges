@@ -14,23 +14,68 @@ Chunk::~Chunk()
 
 void Chunk::generate_mesh(void)
 {
-	int num_vertices = 4;
-	int num_faces = 1;
+	int num_vertices = 0;
+	int num_faces = 0;
 
+	int x, y;
+
+	// counting
+	for(x = 0; x < CHUNK_SIZE_X; x++)
+	{
+		for(y = 0; y < CHUNK_SIZE_Y; y++)
+		{
+			if(this->blocks[x][y] != NONE)
+			{
+				char *s;
+				switch(this->blocks[x][y])
+				{
+					case STONE:
+						s = "stone";
+						break;
+					case DIRT:
+						s = "dirt";
+						break;
+					case GRASS:
+						s = "grass";
+						break;
+				};
+				printf("(%d|%d) is %s\n", x, y, s);
+				num_faces++;
+				num_vertices += 4;
+			}
+		}
+	}
+
+	printf("have %d vertices on %d faces\n", num_vertices, num_faces);
+
+	// allocating memory
 	Vector3D *vertices = (Vector3D*) calloc(num_vertices, sizeof(Vector3D));
 	Face    **faces    = (Face**) calloc(num_faces, sizeof(Face*));
 
-	vertices[0] = Vector3D(-1.0f, 1.0f, 0.0f);
-	vertices[1] = Vector3D( 1.0f, 1.0f, 0.0f);
-	vertices[2] = Vector3D( 1.0f,-1.0f, 0.0f);
-	vertices[3] = Vector3D(-1.0f,-1.0f, 0.0f);
+	// generating vertices
+	int block_ind = 0;
+	for(x = 0; x < CHUNK_SIZE_X; x++)
+	{
+		for(y = 0; y < CHUNK_SIZE_Y; y++)
+		{
+			if(this->blocks[x][y] != NONE)
+			{
+				int *indices = (int*) calloc(4, sizeof(int));
+				indices[0] = block_ind*4 + 0;
+				indices[1] = block_ind*4 + 1;
+				indices[2] = block_ind*4 + 2;
+				indices[3] = block_ind*4 + 3;
 
-	int *indices = (int*) calloc(4, sizeof(int));
-	indices[0] = 0;
-	indices[1] = 1;
-	indices[2] = 2;
-	indices[3] = 3;
-	faces[0] = new Face(4, indices);
+				vertices[indices[0]] = Vector3D(x-0.5f,y+0.5f, 0.0f);
+				vertices[indices[1]] = Vector3D(x+0.5f,y+0.5f, 0.0f);
+				vertices[indices[2]] = Vector3D(x+0.5f,y-0.5f, 0.0f);
+				vertices[indices[3]] = Vector3D(x-0.5f,y-0.5f, 0.0f);
+
+				faces[block_ind] = new Face(4, indices);
+				block_ind ++;
+			}
+		}
+	}
 
 	this->mesh = new Mesh3D(num_vertices, vertices, num_faces, faces);
 //	this->mesh->instance = new RenderInstance(mesh);
