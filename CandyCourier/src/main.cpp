@@ -6,10 +6,34 @@
 
 using namespace oxygarum;
 
+int walking_vel = 0;
+
 void quit(SDL_Event *e)
 {
 	printf("Exiting..\n");
 	exit(0);
+}
+
+void keyboard_down(SDL_Event *e)
+{
+	switch(e->key.keysym.sym)
+	{
+		case 'a':
+			walking_vel = -1;
+			break;
+		case 'd':
+			walking_vel = 1;
+			break;
+	}
+}
+
+void keyboard_up(SDL_Event *e)
+{
+	if(e->key.keysym.sym == 'a' ||
+	   e->key.keysym.sym == 'd')
+	{
+		walking_vel = 0;
+	}
 }
 
 int main(void)
@@ -20,6 +44,8 @@ int main(void)
 	EventManager *eventmanager = new EventManager();
 
 	eventmanager->register_handler(SDL_QUIT, quit);
+	eventmanager->register_handler(SDL_KEYDOWN, keyboard_down);
+	eventmanager->register_handler(SDL_KEYUP, keyboard_up);
 
 	Scene *scene = new Scene();
 	Camera *camera = new Camera(window, scene);
@@ -36,11 +62,11 @@ int main(void)
 			{
 				testchunk->blocks[x][y] = STONE;
 			}
-			else if(y < 4)
+			else if(y < x)
 			{
 				testchunk->blocks[x][y] = DIRT;
 			}
-			else if(y < 5 && x%2 == 0)
+			else if(y < x+1)
 			{
 				testchunk->blocks[x][y] = GRASS;
 			}
@@ -73,6 +99,7 @@ int main(void)
 
 		// update
 		float frametime = window->update();
+		camera->position.x -= walking_vel * frametime * 0.005;
 	}
 
 	return 0;
