@@ -8,7 +8,7 @@ LIBRARIES = -lX11 -lSDL2 -lGLEW -lGL -lGLU -lm -lSDL2_image
 CC = g++
 CFLAGS = -Wall $(INCLUDE)
 OXY = ../../oxygarum/src/oxygarum.a
-BIN = CandyCourier
+BIN = candycourier
 
 $(BIN): $(OBJS)
 	$(CC) -o $@ $^ $(LIBDIR)$(LIBRARIES) $(OXY)
