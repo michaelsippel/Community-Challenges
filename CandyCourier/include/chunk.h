@@ -6,8 +6,8 @@
 
 using namespace oxygarum;
 
-#define CHUNK_SIZE_X 8
-#define CHUNK_SIZE_Y 8
+#define CHUNK_SIZE_X 16
+#define CHUNK_SIZE_Y 16
 
 class Chunk
 {

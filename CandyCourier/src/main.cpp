@@ -52,7 +52,7 @@ int main(void)
 
 	Scene *scene = new Scene();
 	Camera *camera = new Camera(window, scene);
-	camera->position = Vector3D(0.0f, -3.0f, -12.0f);
+	camera->position = Vector3D(0.0f, -8.0f, -25.0f);
 
 	Chunk *testchunk = new Chunk();
 
@@ -61,15 +61,15 @@ int main(void)
 	{
 		for(y = 0; y < CHUNK_SIZE_Y; y++)
 		{
-			if(y == 0)
+			if(y < x)
 			{
 				testchunk->blocks[x][y] = STONE;
 			}
-			else if(y < x)
+			else if(y < x+5)
 			{
 				testchunk->blocks[x][y] = DIRT;
 			}
-			else if(y < x+1)
+			else if(y < x+6)
 			{
 				testchunk->blocks[x][y] = GRASS;
 			}
