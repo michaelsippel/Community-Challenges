@@ -23,7 +23,7 @@ int main(void)
 
 	Scene *scene = new Scene();
 	Camera *camera = new Camera(window, scene);
-	camera->position = Vector3D(0.0f, -5.0f, -15.0f);
+	camera->position = Vector3D(0.0f, -3.0f, -12.0f);
 
 	Chunk *testchunk = new Chunk();
 

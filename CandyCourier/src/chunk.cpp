@@ -81,10 +81,10 @@ void Chunk::generate_mesh(void)
 						1.0f / TEXTURE_GRID_Y
 						);
 
-				texcoords[indices[3]] = Vector2D(loc.x,          loc.y - size.y);
+				texcoords[indices[3]] = Vector2D(loc.x+1.0f/64.0f,          loc.y - size.y);
 				texcoords[indices[2]] = Vector2D(loc.x + size.x, loc.y - size.y);
 				texcoords[indices[1]] = Vector2D(loc.x + size.x, loc.y);
-				texcoords[indices[0]] = Vector2D(loc.x,          loc.y);
+				texcoords[indices[0]] = Vector2D(loc.x+1.0f/64.0f,          loc.y);
 
 				faces[block_ind] = new Face(4, indices, indices);
 				block_ind ++;
