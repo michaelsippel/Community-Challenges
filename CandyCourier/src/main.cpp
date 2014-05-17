@@ -3,10 +3,11 @@
 
 #include "chunk.h"
 #include "materials.h"
+#include "player.h"
 
 using namespace oxygarum;
 
-int walking_vel = 0;
+Player *player;
 
 void quit(SDL_Event *e)
 {
@@ -19,10 +20,10 @@ void keyboard_down(SDL_Event *e)
 	switch(e->key.keysym.sym)
 	{
 		case 'a':
-			walking_vel = -1;
+			player->move(-1);
 			break;
 		case 'd':
-			walking_vel = 1;
+			player->move(1);
 			break;
 	}
 }
@@ -32,7 +33,7 @@ void keyboard_up(SDL_Event *e)
 	if(e->key.keysym.sym == 'a' ||
 	   e->key.keysym.sym == 'd')
 	{
-		walking_vel = 0;
+		player->move(0);
 	}
 }
 
@@ -46,6 +47,8 @@ int main(void)
 	eventmanager->register_handler(SDL_QUIT, quit);
 	eventmanager->register_handler(SDL_KEYDOWN, keyboard_down);
 	eventmanager->register_handler(SDL_KEYUP, keyboard_up);
+
+	player = new Player();
 
 	Scene *scene = new Scene();
 	Camera *camera = new Camera(window, scene);
@@ -99,7 +102,8 @@ int main(void)
 
 		// update
 		float frametime = window->update();
-		camera->position.x -= walking_vel * frametime * 0.005;
+		player->update(frametime*0.005);
+		camera->position.x = - player->obj->position.x;
 	}
 
 	return 0;
