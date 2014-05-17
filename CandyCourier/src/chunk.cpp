@@ -50,6 +50,7 @@ void Chunk::generate_mesh(void)
 
 	// allocating memory
 	Vector3D *vertices = (Vector3D*) calloc(num_vertices, sizeof(Vector3D));
+	Vector2D *texcoords = (Vector2D*) calloc(num_vertices, sizeof(Vector2D));
 	Face    **faces    = (Face**) calloc(num_faces, sizeof(Face*));
 
 	// generating vertices
@@ -71,13 +72,27 @@ void Chunk::generate_mesh(void)
 				vertices[indices[2]] = Vector3D(x+0.5f,y-0.5f, 0.0f);
 				vertices[indices[3]] = Vector3D(x-0.5f,y-0.5f, 0.0f);
 
-				faces[block_ind] = new Face(4, indices);
+				Vector2D loc = Vector2D(
+						texture_locations[this->blocks[x][y]].x / TEXTURE_GRID_X,
+						texture_locations[this->blocks[x][y]].y / TEXTURE_GRID_Y
+						);
+				Vector2D size = Vector2D(
+						1.0f / TEXTURE_GRID_X,
+						1.0f / TEXTURE_GRID_Y
+						);
+
+				texcoords[indices[3]] = Vector2D(loc.x,          loc.y - size.y);
+				texcoords[indices[2]] = Vector2D(loc.x + size.x, loc.y - size.y);
+				texcoords[indices[1]] = Vector2D(loc.x + size.x, loc.y);
+				texcoords[indices[0]] = Vector2D(loc.x,          loc.y);
+
+				faces[block_ind] = new Face(4, indices, indices);
 				block_ind ++;
 			}
 		}
 	}
 
-	this->mesh = new Mesh3D(num_vertices, vertices, num_faces, faces);
+	this->mesh = new Mesh3D(num_vertices, vertices, num_vertices, texcoords, num_faces, faces);
 //	this->mesh->instance = new RenderInstance(mesh);
 
 	this->obj = new Object3D();

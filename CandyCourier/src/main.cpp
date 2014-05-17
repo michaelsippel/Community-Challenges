@@ -51,7 +51,15 @@ int main(void)
 		}
 	}
 
+	Material *mat = new Material();
+	Texture *tex = loader::load_texture("data/texture.png");
+	tex->params->add(new TextureParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+	tex->params->add(new TextureParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+	tex->load();
+	mat->map_texture(tex, "", 0);
+
 	testchunk->generate_mesh();
+	testchunk->obj->material = mat;
 	scene->objects3D->add(testchunk->obj);
 
 	while(1)

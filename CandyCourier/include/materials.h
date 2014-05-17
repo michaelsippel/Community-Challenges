@@ -13,5 +13,16 @@ enum block_type
 	GRASS
 };
 
+#define TEXTURE_GRID_X 4
+#define TEXTURE_GRID_Y 4
+
+const Vector2D texture_locations[4] =
+{
+	Vector2D(2, 2), // NONE
+	Vector2D(0, 0), // STONE
+	Vector2D(1, 0), // DIRT
+	Vector2D(2, 0)  // GRASS
+};
+
 #endif
 
