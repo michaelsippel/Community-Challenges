@@ -2,6 +2,7 @@
 #include <oxygarum.h>
 #include "player.h"
 #include "materials.h"
+#include "chunk.h"
 
 Player::Player()
 {
@@ -23,7 +24,7 @@ Player::Player()
 	faces[0] = new Face(4, indices, indices);
 
 	this->mesh = new Mesh3D(4, vertices, 4, texcoords, 1, faces);
-	this->obj = new Object3D(Vector3D(0.0f, 8.0f, 0.0f));
+	this->obj = new Object3D(Vector3D(1.00f, 7.0f, 0.0f));
 	this->obj->mesh = this->mesh;
 
 	this->obj->setFlag(OBJECT_TRANSPARENT);
@@ -33,33 +34,63 @@ Player::~Player()
 {
 }
 
-void Player::update(float speed)
+void Player::update(float speed, Chunk **chunks)
 {
 	// check collisions
 	int collide_left = 0;
 	int collide_right = 0;
 	int collide_top = 0;
-	int collide_bottom = 1;
-	
-	// gravitation
-	if(! collide_bottom)
+	int collide_bottom = 0;
+
+	Chunk *current_chunk = chunks[0];
+	int cx = (int) (0.5+this->obj->position.x - current_chunk->id*CHUNK_SIZE_X);
+	int cy = (int) (this->obj->position.y);
+
+	if(cx > 0)
 	{
-		this->vel_y -= 0.981;
+		if(current_chunk->blocks[cx-1][cy] != NONE)
+		{
+			collide_left = 1;
+		}
 	}
 
-	// move
+	if(cx+1 < CHUNK_SIZE_Y)
+	{
+		if(current_chunk->blocks[cx+1][cy] != NONE)
+		{
+			collide_right = 1;
+		}
+	}
+
+	if(cy > 0)
+	{
+		if(current_chunk->blocks[cx][cy-1] != NONE)
+			
+		{
+			if(this->obj->position.y < cy+0.1)
+			collide_bottom = 1;
+		}
+	}
+	
+	// gravitation
+	this->vel_y -= 0.981 * speed;
+	
+	// stop if collide
 	if( (collide_left && vel_x < 0.0f) ||
 	    (collide_right && vel_x > 0.0f))
 	{
 		this->vel_x = 0.0f;
+	//	this->obj->position.x = (float) cx;
 	}
 
 	if( (collide_top && vel_y > 0.0f) ||
 	    (collide_bottom && vel_y < 0.0f))
 	{
 		this->vel_y = 0.0f;
+		this->obj->position.y = (float) cy;
 	}
 
+	// move
 	this->obj->position.x += speed * this->vel_x;
 	this->obj->position.y += speed * this->vel_y;
 }

@@ -2,6 +2,7 @@
 #define _PLAYER_H
 
 #include <oxygarum.h>
+#include "chunk.h"
 
 using namespace oxygarum;
 
@@ -11,7 +12,7 @@ class Player
 		Player();
 		~Player();
 
-		void update(float speed);
+		void update(float speed, Chunk **chunks);
 		void move(float vel);
 		void jump(float vel);
 

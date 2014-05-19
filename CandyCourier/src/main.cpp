@@ -43,6 +43,7 @@ void keyboard_down(SDL_Event *e)
 			player->move(1);
 			break;
 		case ' ':
+		case 's':
 			player->jump(2);
 			break;
 	}
@@ -126,7 +127,7 @@ int main(void)
 
 		// update
 		float frametime = window->update();
-		player->update(frametime*0.005);
+		player->update(frametime*0.005, &testchunk);
 		camera->position.x = - player->obj->position.x;
 	}
 

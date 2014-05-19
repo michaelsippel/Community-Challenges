@@ -20,6 +20,8 @@ class Chunk
 
 		Mesh3D *mesh;
 		Object3D *obj;
+
+		int id;
 };
 
 #endif

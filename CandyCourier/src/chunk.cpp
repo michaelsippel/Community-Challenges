@@ -4,8 +4,10 @@
 
 Chunk::Chunk()
 {
+	static int count = 0;
 	this->mesh = NULL;
 	this->obj = NULL;
+	this->id = count++;
 }
 
 Chunk::~Chunk()
