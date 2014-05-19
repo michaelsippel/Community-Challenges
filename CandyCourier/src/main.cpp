@@ -42,6 +42,9 @@ void keyboard_down(SDL_Event *e)
 		case 'd':
 			player->move(1);
 			break;
+		case ' ':
+			player->jump(2);
+			break;
 	}
 }
 

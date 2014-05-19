@@ -12,15 +12,15 @@ class Player
 		~Player();
 
 		void update(float speed);
-		void move(int vel_);
-		void jump(int height);
+		void move(float vel);
+		void jump(float vel);
 
 		Mesh3D *mesh;
 		Object3D *obj;
 
 	private:
-		int vel;
-		int jump_count;
+		float vel_x;
+		float vel_y;
 };
 
 #endif

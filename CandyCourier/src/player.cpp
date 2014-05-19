@@ -35,19 +35,45 @@ Player::~Player()
 
 void Player::update(float speed)
 {
-	this->obj->position.x += speed * vel;
-}
-
-void Player::move(int vel_)
-{
-	this->vel = vel_;
-}
-
-void Player::jump(int height)
-{
-	if(this->jump_count == 0)
+	// check collisions
+	int collide_left = 0;
+	int collide_right = 0;
+	int collide_top = 0;
+	int collide_bottom = 1;
+	
+	// gravitation
+	if(! collide_bottom)
 	{
-		this->jump_count = height;
+		this->vel_y -= 0.981;
+	}
+
+	// move
+	if( (collide_left && vel_x < 0.0f) ||
+	    (collide_right && vel_x > 0.0f))
+	{
+		this->vel_x = 0.0f;
+	}
+
+	if( (collide_top && vel_y > 0.0f) ||
+	    (collide_bottom && vel_y < 0.0f))
+	{
+		this->vel_y = 0.0f;
+	}
+
+	this->obj->position.x += speed * this->vel_x;
+	this->obj->position.y += speed * this->vel_y;
+}
+
+void Player::move(float vel)
+{
+	this->vel_x = (float)vel;
+}
+
+void Player::jump(float vel)
+{
+	if(this->vel_y == 0.0f)
+	{
+		this->vel_y = vel;
 	}
 }
 
