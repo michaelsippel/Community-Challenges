@@ -15,6 +15,23 @@ void quit(SDL_Event *e)
 	exit(0);
 }
 
+void gen_texcoords(Vector2D *texcoords, int x, int y, int gx, int gy)
+{
+	Vector2D loc = Vector2D(
+		(float)x / (float)gx,
+		1.0f - ((float)y / (float)gy)
+	);
+	Vector2D size = Vector2D(
+		1.0f / (float)gx,
+		1.0f / (float)gy
+	);
+
+	texcoords[3] = Vector2D(loc.x +1.0f/64.0f,loc.y - size.y);
+	texcoords[2] = Vector2D(loc.x + size.x, loc.y - size.y);
+	texcoords[1] = Vector2D(loc.x + size.x, loc.y);
+	texcoords[0] = Vector2D(loc.x +1.0f/64.0f, loc.y);
+}
+
 void keyboard_down(SDL_Event *e)
 {
 	switch(e->key.keysym.sym)
@@ -89,7 +106,11 @@ int main(void)
 
 	testchunk->generate_mesh();
 	testchunk->obj->material = mat;
+	
+	player->obj->material = mat;	
+
 	scene->objects3D->add(testchunk->obj);
+	scene->objects3D->add(player->obj);
 
 	while(1)
 	{

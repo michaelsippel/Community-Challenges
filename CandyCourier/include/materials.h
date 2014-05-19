@@ -16,13 +16,15 @@ enum block_type
 #define TEXTURE_GRID_X 4
 #define TEXTURE_GRID_Y 4
 
-const Vector2D texture_locations[4] =
+const int texture_locations[4][2] =
 {
-	Vector2D(2, 2), // NONE
-	Vector2D(0, 0), // STONE
-	Vector2D(1, 0), // DIRT
-	Vector2D(2, 0)  // GRASS
+	{2, 2}, // NONE
+	{0, 0}, // STONE
+	{1, 0}, // DIRT
+	{2, 0}  // GRASS
 };
+
+void gen_texcoords(Vector2D *texcoords, int x, int y, int gx, int gy);
 
 #endif
 
