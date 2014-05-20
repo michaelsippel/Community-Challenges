@@ -44,30 +44,41 @@ void Player::update(float speed, Chunk **chunks)
 
 	Chunk *current_chunk = chunks[0];
 	int cx = (int) (0.5+this->obj->position.x - current_chunk->id*CHUNK_SIZE_X);
-	int cy = (int) (this->obj->position.y);
+	int cy = (int) (0.5+this->obj->position.y);
 
 	if(cx > 0)
 	{
-		if(current_chunk->blocks[cx-1][cy] != NONE)
+		if(current_chunk->blocks[cx-1][cy] != NONE &&
+			this->obj->position.x <= cx)
 		{
 			collide_left = 1;
 		}
 	}
 
-	if(cx+1 < CHUNK_SIZE_Y)
+	if(cx+1 < CHUNK_SIZE_X)
 	{
-		if(current_chunk->blocks[cx+1][cy] != NONE)
+		if(current_chunk->blocks[cx+1][cy] != NONE &&
+			this->obj->position.x >= cx)
 		{
 			collide_right = 1;
 		}
 	}
 
+	if(cy+1 < CHUNK_SIZE_Y)
+	{
+		if(current_chunk->blocks[cx][cy+1] != NONE &&
+			this->obj->position.y >= cy)
+		{
+			collide_top = 1;
+		}
+	}
+
 	if(cy > 0)
 	{
-		if(current_chunk->blocks[cx][cy-1] != NONE)
+		if(current_chunk->blocks[cx][cy-1] != NONE &&
+			this->obj->position.y <= cy)
 			
 		{
-			if(this->obj->position.y < cy+0.1)
 			collide_bottom = 1;
 		}
 	}
@@ -80,7 +91,7 @@ void Player::update(float speed, Chunk **chunks)
 	    (collide_right && vel_x > 0.0f))
 	{
 		this->vel_x = 0.0f;
-	//	this->obj->position.x = (float) cx;
+		this->obj->position.x = (float) cx;
 	}
 
 	if( (collide_top && vel_y > 0.0f) ||

@@ -111,7 +111,7 @@ int main(void)
 	testchunk->generate_mesh();
 	testchunk->obj->material = mat;
 	
-	player->obj->material = mat;	
+	player->obj->material = mat;
 
 	scene->objects3D->add(testchunk->obj);
 	scene->objects3D->add(player->obj);
