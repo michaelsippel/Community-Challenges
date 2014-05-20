@@ -24,7 +24,7 @@ Player::Player()
 	faces[0] = new Face(4, indices, indices);
 
 	this->mesh = new Mesh3D(4, vertices, 4, texcoords, 1, faces);
-	this->obj = new Object3D(Vector3D(1.00f, 7.0f, 0.0f));
+	this->obj = new Object3D(Vector3D(1.00f, 15.0f, 0.0f));
 	this->obj->mesh = this->mesh;
 
 	this->obj->setFlag(OBJECT_TRANSPARENT);

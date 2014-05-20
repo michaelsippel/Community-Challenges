@@ -85,7 +85,7 @@ void Chunk::generate_mesh(void)
 	this->mesh = new Mesh3D(num_vertices, vertices, num_vertices, texcoords, num_faces, faces);
 	this->mesh->instance = new RenderInstance(mesh);
 
-	this->obj = new Object3D();
+	this->obj = new Object3D(Vector3D((float)this->id*(float)CHUNK_SIZE_X, 0.0f, 0.0f));
 	this->obj->mesh = mesh;
 	this->obj->setFlag(OBJECT_RENDER_VBO);
 

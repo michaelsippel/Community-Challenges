@@ -58,6 +58,57 @@ void keyboard_up(SDL_Event *e)
 	}
 }
 
+float noise2(int x, int y)
+{
+	int n=(int)x+(int)y*57;
+	n=(n<<13)^n;
+	int nn=(n*(n*n*60493+19990303)+1376312589)&0x7fffffff;
+	return 1.0-((float)nn/1073741824.0);
+}
+
+inline float interpolate(float a,float b,float x)
+{
+	float ft=x * 3.1415927;
+	float f=(1.0-cos(ft))* 0.5;
+	return a*(1.0-f)+b*f;
+}
+
+
+float smooth_noise(float x,float y)
+{
+	float floorx=(float)((int)x);
+	float floory=(float)((int)y);
+	float e, s,t,u,v;
+
+	s = noise2(floorx,floory); 
+	t = noise2(floorx+1,floory);
+	u = noise2(floorx,floory+1);
+	v = noise2(floorx+1,floory+1);
+
+	float int1=interpolate(s,t,x-floorx);
+	float int2=interpolate(u,v,x-floorx);
+	return interpolate(int1,int2,y-floory);
+}
+
+float perlin_noise(float x, float y)
+{
+	int i;
+    float n = 0;
+
+    float amp = 1.0f;
+	float persistence = 0.5;
+	int octaves = 4;
+    unsigned int freq = 2;
+
+    for(i = 0; i < octaves; i++) {
+        n += smooth_noise(x*freq, y*freq) * amp;
+        freq *= 2;
+        amp *= persistence;
+    }
+
+    return (float) (n / (float)octaves);
+}
+
 int main(void)
 {
 	printf("Hello Candy-World!\n");
@@ -75,31 +126,6 @@ int main(void)
 	Camera *camera = new Camera(window, scene);
 	camera->position = Vector3D(0.0f, -8.0f, -25.0f);
 
-	Chunk *testchunk = new Chunk();
-
-	int x,y;
-	for(x = 0; x < CHUNK_SIZE_X; x++)
-	{
-		for(y = 0; y < CHUNK_SIZE_Y; y++)
-		{
-			if(y < x)
-			{
-				testchunk->blocks[x][y] = STONE;
-			}
-			else if(y < x+5)
-			{
-				testchunk->blocks[x][y] = DIRT;
-			}
-			else if(y < x+6)
-			{
-				testchunk->blocks[x][y] = GRASS;
-			}
-			else
-			{
-				testchunk->blocks[x][y] = NONE;
-			}
-		}
-	}
 
 	Material *mat = new Material();
 	Texture *tex = loader::load_texture("data/texture.png");
@@ -108,12 +134,44 @@ int main(void)
 	tex->load();
 	mat->map_texture(tex, "", 0);
 
-	testchunk->generate_mesh();
-	testchunk->obj->material = mat;
+	Chunk *chunks[32];
+
+	int i;
+	for(i =0; i<32; i++)
+	{
+		chunks[i] = new Chunk();
+
+		int x,y;
+		for(x = 0; x < CHUNK_SIZE_X; x++)
+		{
+			for(y = 0; y < CHUNK_SIZE_Y; y++)
+			{
+				float fx = (float)x / (float)CHUNK_SIZE_X;
+				float fy = (float)y / (float)CHUNK_SIZE_Y;
+
+				float dx = (fx - 0.5f) * 2.0f;
+				float dy = (fy - 0.5f) * 2.0f;
+				float n = 1-perlin_noise(fx,fy);
+				float val = dy + n;
+
+				if(val < 0.7f)
+				{
+					chunks[i]->blocks[x][y] = STONE;
+				}
+				else
+				{
+					chunks[i]->blocks[x][y] = NONE;
+				}
+			}
+		}
+
+		chunks[i]->generate_mesh();
+		chunks[i]->obj->material = mat;
+	
+		scene->objects3D->add(chunks[i]->obj);
+	}
 	
 	player->obj->material = mat;
-
-	scene->objects3D->add(testchunk->obj);
 	scene->objects3D->add(player->obj);
 
 	while(1)
@@ -127,7 +185,7 @@ int main(void)
 
 		// update
 		float frametime = window->update();
-		player->update(frametime*0.005, &testchunk);
+		player->update(frametime*0.005, chunks);
 		camera->position.x = - player->obj->position.x;
 	}
 
