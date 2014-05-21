@@ -129,8 +129,7 @@ int main(void)
 
 	Scene *scene = new Scene();
 	Camera *camera = new Camera(window, scene);
-	camera->position = Vector3D(0.0f, -8.0f, -25.0f);
-
+	camera->position = Vector3D(0.0f, -10.0f, -25.0f);
 
 	Material *mat = new Material();
 	Texture *tex = loader::load_texture("data/texture.png");
@@ -138,14 +137,24 @@ int main(void)
 	tex->params->add(new TextureParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST));
 	tex->load();
 	mat->map_texture(tex, "", 0);
+	
+	glEnable(GL_DEPTH_TEST);
 
 	Chunk *chunks[32];
+	Chunk *hills1[32];
+	Chunk *hills2[32];
+	Chunk *clouds[32];
 
 	int i;
 	for(i =0; i<32; i++)
 	{
 		chunks[i] = new Chunk();
+		chunks[i]->id = i;
+		hills1[i] = new Chunk();
+		hills2[i] = new Chunk();
+		clouds[i] = new Chunk();
 
+		// generate playable terrain
 		int x,y;
 		for(x = 0; x < CHUNK_SIZE_X; x++)
 		{
@@ -179,10 +188,76 @@ int main(void)
 			}
 		}
 
+		// generate Hills
+		for(x = 0; x < CHUNK_SIZE_X; x++)
+		{
+			int nx1 = x + (i+12234)*CHUNK_SIZE_X;
+			int nx2 = x + (i+23453)*CHUNK_SIZE_X;
+			float noise1 = perlin_noise(nx1);
+			float noise2 = perlin_noise(nx2);
+			int height1 = (int)1+ ( noise1 * (float)CHUNK_SIZE_Y-2.0f )*1.5f;
+			int height2 = (int)2+ ( noise2 * (float)CHUNK_SIZE_Y-2.0f )*1.5f;
+
+			for(y = 0; y < CHUNK_SIZE_Y; y++)
+			{
+				if(y == height1)
+				{
+					hills1[i]->blocks[x][y] = GRASS;
+				}
+				else if(y == height1-1)
+				{
+					hills1[i]->blocks[x][y] = DIRT;
+				}
+				else if(y < height1)
+				{
+					hills1[i]->blocks[x][y] = STONE;
+				}
+				else
+				{
+					hills1[i]->blocks[x][y] = NONE;
+				}
+
+				if(y == height2)
+				{
+					hills2[i]->blocks[x][y] = GRASS;
+				}
+				else if(y == height2-1)
+				{
+					hills2[i]->blocks[x][y] = DIRT;
+				}
+				else if(y < height2)
+				{
+					hills2[i]->blocks[x][y] = STONE;
+				}
+				else
+				{
+					hills2[i]->blocks[x][y] = NONE;
+				}
+			}
+		}
+
 		chunks[i]->generate_mesh();
 		chunks[i]->obj->material = mat;
-	
+
+		hills1[i]->generate_mesh();
+		hills1[i]->obj->material = mat;
+
+		hills1[i]->obj->scaling = Vector3D(1.5f, 1.0f, 1.0f);
+		hills1[i]->obj->position.x = -10.0f + 16*i;
+		hills1[i]->obj->position.y = -2.0f;
+		hills1[i]->obj->position.z = -10.0f;
+
+		hills2[i]->generate_mesh();
+		hills2[i]->obj->material = mat;
+
+		hills2[i]->obj->scaling = Vector3D(2.0f, 2.0f, 1.0f);
+		hills2[i]->obj->position.x = -10.0f + 16*i;
+		hills2[i]->obj->position.y = -2.0f;
+		hills2[i]->obj->position.z = -20.0f;
+
 		scene->objects3D->add(chunks[i]->obj);
+		scene->objects3D->add(hills1[i]->obj);
+		scene->objects3D->add(hills2[i]->obj);
 	}
 	
 	player->obj->material = mat;
