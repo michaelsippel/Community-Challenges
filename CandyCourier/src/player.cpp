@@ -28,6 +28,8 @@ Player::Player()
 	this->obj->mesh = this->mesh;
 
 	this->obj->setFlag(OBJECT_TRANSPARENT);
+
+	this->candies = 0;
 }
 
 Player::~Player()
@@ -52,6 +54,15 @@ void Player::update(float speed, Chunk **chunks)
 		if(current_chunk->blocks[cx-1][cy] != NONE &&
 			this->obj->position.x <= cx)
 		{
+			if( current_chunk->blocks[cx-1][cy]== CHOCO ||
+				current_chunk->blocks[cx-1][cy]== BONBON||
+				current_chunk->blocks[cx-1][cy]== GUMMI)
+			{
+				this->candies ++;
+				current_chunk->blocks[cx-1][cy] = NONE;
+				current_chunk->generate_mesh();
+				current_chunk->obj->mesh->instance->create();
+			}
 			collide_left = 1;
 		}
 	}
@@ -61,6 +72,15 @@ void Player::update(float speed, Chunk **chunks)
 		if(current_chunk->blocks[cx+1][cy] != NONE &&
 			this->obj->position.x >= cx)
 		{
+			if( current_chunk->blocks[cx+1][cy]== CHOCO ||
+				current_chunk->blocks[cx+1][cy]== BONBON||
+				current_chunk->blocks[cx+1][cy]== GUMMI)
+			{
+				this->candies ++;
+				current_chunk->blocks[cx+1][cy] = NONE;
+				current_chunk->generate_mesh();
+				current_chunk->obj->mesh->instance->create();
+			}
 			collide_right = 1;
 		}
 	}
@@ -70,6 +90,15 @@ void Player::update(float speed, Chunk **chunks)
 		if(current_chunk->blocks[cx][cy+1] != NONE &&
 			this->obj->position.y >= cy)
 		{
+			if( current_chunk->blocks[cx][cy+1]== CHOCO ||
+				current_chunk->blocks[cx][cy+1]== BONBON||
+				current_chunk->blocks[cx][cy+1]== GUMMI)
+			{
+				this->candies ++;
+				current_chunk->blocks[cx][cy+1] = NONE;
+				current_chunk->generate_mesh();
+				current_chunk->obj->mesh->instance->create();
+			}
 			collide_top = 1;
 		}
 	}
@@ -80,6 +109,15 @@ void Player::update(float speed, Chunk **chunks)
 			this->obj->position.y <= cy)
 			
 		{
+			if( current_chunk->blocks[cx][cy-1]== CHOCO ||
+				current_chunk->blocks[cx][cy-1]== BONBON||
+				current_chunk->blocks[cx][cy-1]== GUMMI)
+			{
+				this->candies ++;
+				current_chunk->blocks[cx][cy-1] = NONE;
+				current_chunk->generate_mesh();
+				current_chunk->obj->mesh->instance->create();
+			}
 			collide_bottom = 1;
 		}
 	}

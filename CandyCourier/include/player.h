@@ -19,6 +19,8 @@ class Player
 		Mesh3D *mesh;
 		Object3D *obj;
 
+		int candies;
+
 	private:
 		float vel_x;
 		float vel_y;

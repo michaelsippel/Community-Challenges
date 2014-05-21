@@ -118,7 +118,7 @@ int main(void)
 {
 	printf("Hello Candy-World!\n");
 
-	SDLWindow *window = new SDLWindow("CandyCourier", 800,600);
+	SDLWindow *window = new SDLWindow("CandyCourier", 16*64,9*64);
 	EventManager *eventmanager = new EventManager();
 
 	eventmanager->register_handler(SDL_QUIT, quit);
@@ -297,9 +297,9 @@ int main(void)
 		chunks[i]->obj->material = mat;
 		chunks[i]->obj->setFlag(OBJECT_TRANSPARENT);
 		
-		scene->objects3D->add(hills1[i]->obj);
-		scene->objects3D->add(hills2[i]->obj);
 		scene->objects3D->add(clouds[i]->obj);
+		scene->objects3D->add(hills2[i]->obj);
+		scene->objects3D->add(hills1[i]->obj);
 
 		scene->objects3D->add(chunks[i]->obj);
 	}

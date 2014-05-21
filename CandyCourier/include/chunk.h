@@ -19,6 +19,9 @@ class Chunk
 		void generate_mesh(void);
 
 		Mesh3D *mesh;
+		Vector3D *vertices;
+		Vector2D *texcoords;
+		Face **faces;
 		Object3D *obj;
 
 		int id;
