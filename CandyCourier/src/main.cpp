@@ -58,51 +58,45 @@ void keyboard_up(SDL_Event *e)
 	}
 }
 
-float noise2(int x, int y)
+float noise(int x)
 {
-	int n=(int)x+(int)y*57;
-	n=(n<<13)^n;
-	int nn=(n*(n*n*60493+19990303)+1376312589)&0x7fffffff;
-	return 1.0-((float)nn/1073741824.0);
+	x = (x<<13) ^ x;
+    float n = (float) ( 1.0 - ( (x * (x * x * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
+
+	return 0.5f + n/2.0f;
 }
 
-inline float interpolate(float a,float b,float x)
+float lerp(float a,float b,float x)
 {
-	float ft=x * 3.1415927;
-	float f=(1.0-cos(ft))* 0.5;
-	return a*(1.0-f)+b*f;
+	return a * ( 1 - x ) + b * x;
 }
 
-
-float smooth_noise(float x,float y)
+float interpolated_noise(int x, int freq)
 {
-	float floorx=(float)((int)x);
-	float floory=(float)((int)y);
-	float e, s,t,u,v;
+    int x1 = x - (x%freq);
+	int x2 = x1 + freq;
+	float diff = (float)(x%freq)/(float)freq;
 
-	s = noise2(floorx,floory); 
-	t = noise2(floorx+1,floory);
-	u = noise2(floorx,floory+1);
-	v = noise2(floorx+1,floory+1);
-
-	float int1=interpolate(s,t,x-floorx);
-	float int2=interpolate(u,v,x-floorx);
-	return interpolate(int1,int2,y-floory);
+    float n1 = noise(x1);
+    float n2 = noise(x2);
+    float n = lerp(n1, n2, diff);
+	
+    return n;
 }
 
-float perlin_noise(float x, float y)
+float perlin_noise(int x)
 {
 	int i;
     float n = 0;
 
     float amp = 1.0f;
 	float persistence = 0.5;
-	int octaves = 4;
-    unsigned int freq = 2;
+	int octaves = 2;
+    unsigned int freq = 16;
 
     for(i = 0; i < octaves; i++) {
-        n += smooth_noise(x*freq, y*freq) * amp;
-        freq *= 2;
+        n += interpolated_noise(x, freq) * amp;
+        freq /= 2;
         amp *= persistence;
     }
 
@@ -144,23 +138,32 @@ int main(void)
 		int x,y;
 		for(x = 0; x < CHUNK_SIZE_X; x++)
 		{
+			int nx = x + i*CHUNK_SIZE_X;
+			float noise = perlin_noise(nx);
+			int height = (int) ( noise * (float)CHUNK_SIZE_Y-2.0f );
+			//printf("height: %d, noise: %f\n", height, noise);
 			for(y = 0; y < CHUNK_SIZE_Y; y++)
 			{
-				float fx = (float)x / (float)CHUNK_SIZE_X;
-				float fy = (float)y / (float)CHUNK_SIZE_Y;
-
-				float dx = (fx - 0.5f) * 2.0f;
-				float dy = (fy - 0.5f) * 2.0f;
-				float n = 1-perlin_noise(fx,fy);
-				float val = dy + n;
-
-				if(val < 0.7f)
+				if(y == height)
+				{
+					chunks[i]->blocks[x][y] = GRASS;
+				}
+				else if(y == height-1)
+				{
+					chunks[i]->blocks[x][y] = DIRT;
+				}
+				else if(y < height)
 				{
 					chunks[i]->blocks[x][y] = STONE;
 				}
 				else
 				{
 					chunks[i]->blocks[x][y] = NONE;
+					if( (i == 0 && x == 0) ||
+					    (i ==31 && x ==15) )
+					{
+						chunks[i]->blocks[x][y] = STONE;
+					}
 				}
 			}
 		}

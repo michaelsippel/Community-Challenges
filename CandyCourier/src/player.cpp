@@ -42,7 +42,8 @@ void Player::update(float speed, Chunk **chunks)
 	int collide_top = 0;
 	int collide_bottom = 0;
 
-	Chunk *current_chunk = chunks[0];
+	int c_id = this->obj->position.x / CHUNK_SIZE_X;
+	Chunk *current_chunk = chunks[c_id];
 	int cx = (int) (0.5+this->obj->position.x - current_chunk->id*CHUNK_SIZE_X);
 	int cy = (int) (0.5+this->obj->position.y);
 
@@ -91,7 +92,7 @@ void Player::update(float speed, Chunk **chunks)
 	    (collide_right && vel_x > 0.0f))
 	{
 		this->vel_x = 0.0f;
-		this->obj->position.x = (float) cx;
+		this->obj->position.x = (float) c_id*CHUNK_SIZE_X+cx;
 	}
 
 	if( (collide_top && vel_y > 0.0f) ||
