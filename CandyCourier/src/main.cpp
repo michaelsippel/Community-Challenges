@@ -25,14 +25,14 @@ void gen_texcoords(Vector2D *texcoords, int x, int y, int gx, int gy)
 		1.0f - ((float)y / (float)gy)
 	);
 	Vector2D size = Vector2D(
-		1.0f / (float)gx,
-		1.0f / (float)gy
+		1.0f / (float)gx - 1.0f/64.0f,
+		1.0f / (float)gy - 1.0f/64.0f
 	);
 
-	texcoords[3] = Vector2D(loc.x +1.0f/64.0f,loc.y - size.y);
-	texcoords[2] = Vector2D(loc.x + size.x, loc.y - size.y);
-	texcoords[1] = Vector2D(loc.x + size.x, loc.y);
-	texcoords[0] = Vector2D(loc.x +1.0f/64.0f, loc.y);
+	texcoords[3] = Vector2D(loc.x,loc.y - size.y);
+	texcoords[2] = Vector2D(loc.x+ size.x, loc.y - size.y);
+	texcoords[1] = Vector2D(loc.x+ size.x, loc.y);
+	texcoords[0] = Vector2D(loc.x, loc.y);
 }
 
 void keyboard_down(SDL_Event *e)
@@ -133,8 +133,8 @@ int main(void)
 
 	Material *mat = new Material();
 	Texture *tex = loader::load_texture("data/texture.png");
-	tex->params->add(new TextureParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-	tex->params->add(new TextureParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+	tex->params->add(new TextureParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST));
+	tex->params->add(new TextureParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST));
 	tex->load();
 	mat->map_texture(tex, "", 0);
 	
@@ -200,6 +200,23 @@ int main(void)
 
 			for(y = 0; y < CHUNK_SIZE_Y; y++)
 			{
+				int c = rand()%4;
+				switch(c)
+				{
+					case 0:
+						clouds[i]->blocks[x][y] = SKY1;
+						break;
+					case 1:
+						clouds[i]->blocks[x][y] = SKY2;
+						break;
+					case 2:
+						clouds[i]->blocks[x][y] = SKY3;
+						break;
+					case 3:
+						clouds[i]->blocks[x][y] = SKY4;
+						break;
+				}
+
 				if(y == height1)
 				{
 					hills1[i]->blocks[x][y] = GRASS;
@@ -233,6 +250,7 @@ int main(void)
 				{
 					hills2[i]->blocks[x][y] = NONE;
 				}
+
 			}
 		}
 
@@ -242,9 +260,9 @@ int main(void)
 		hills1[i]->generate_mesh();
 		hills1[i]->obj->material = mat;
 
-		hills1[i]->obj->scaling = Vector3D(1.5f, 1.0f, 1.0f);
+		hills1[i]->obj->scaling = Vector3D(1.5f, 1.5f, 1.0f);
 		hills1[i]->obj->position.x = -10.0f + 16*i;
-		hills1[i]->obj->position.y = -2.0f;
+		hills1[i]->obj->position.y = -4.0f;
 		hills1[i]->obj->position.z = -10.0f;
 
 		hills2[i]->generate_mesh();
@@ -255,9 +273,17 @@ int main(void)
 		hills2[i]->obj->position.y = -2.0f;
 		hills2[i]->obj->position.z = -20.0f;
 
+		clouds[i]->generate_mesh();
+		clouds[i]->obj->material = mat;
+		clouds[i]->obj->scaling = Vector3D(4.0f, 4.0f, 1.0f);
+		clouds[i]->obj->position.x = -10.0f + 16*i;
+		clouds[i]->obj->position.y = -4.0f;
+		clouds[i]->obj->position.z = -40.0f;
+
 		scene->objects3D->add(chunks[i]->obj);
 		scene->objects3D->add(hills1[i]->obj);
 		scene->objects3D->add(hills2[i]->obj);
+		scene->objects3D->add(clouds[i]->obj);
 	}
 	
 	player->obj->material = mat;
