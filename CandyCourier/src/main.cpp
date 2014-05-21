@@ -179,6 +179,23 @@ int main(void)
 				else
 				{
 					chunks[i]->blocks[x][y] = NONE;
+					if(y == height+1)
+					{
+						int candy = rand()%16;
+						switch(candy)
+						{
+							case 0:
+								chunks[i]->blocks[x][y] = CHOCO;
+								break;
+							case 1:
+								chunks[i]->blocks[x][y] = BONBON;
+								break;
+							case 2:
+								chunks[i]->blocks[x][y] = GUMMI;
+								break;
+						}
+					}
+
 					if( (i == 0 && x == 0) ||
 					    (i ==31 && x ==15) )
 					{
@@ -254,9 +271,6 @@ int main(void)
 			}
 		}
 
-		chunks[i]->generate_mesh();
-		chunks[i]->obj->material = mat;
-
 		hills1[i]->generate_mesh();
 		hills1[i]->obj->material = mat;
 
@@ -279,11 +293,15 @@ int main(void)
 		clouds[i]->obj->position.x = -10.0f + 16*i;
 		clouds[i]->obj->position.y = -4.0f;
 		clouds[i]->obj->position.z = -40.0f;
-
-		scene->objects3D->add(chunks[i]->obj);
+		chunks[i]->generate_mesh();
+		chunks[i]->obj->material = mat;
+		chunks[i]->obj->setFlag(OBJECT_TRANSPARENT);
+		
 		scene->objects3D->add(hills1[i]->obj);
 		scene->objects3D->add(hills2[i]->obj);
 		scene->objects3D->add(clouds[i]->obj);
+
+		scene->objects3D->add(chunks[i]->obj);
 	}
 	
 	player->obj->material = mat;
