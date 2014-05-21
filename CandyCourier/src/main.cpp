@@ -8,6 +8,9 @@
 using namespace oxygarum;
 
 Player *player;
+int a_pressed = 0;
+int s_pressed = 0;
+int d_pressed = 0;
 
 void quit(SDL_Event *e)
 {
@@ -37,24 +40,32 @@ void keyboard_down(SDL_Event *e)
 	switch(e->key.keysym.sym)
 	{
 		case 'a':
-			player->move(-1);
+			a_pressed = 1;
 			break;
 		case 'd':
-			player->move(1);
+			d_pressed = 1;
 			break;
 		case ' ':
 		case 's':
-			player->jump(2);
+			s_pressed = 1;
 			break;
 	}
 }
 
 void keyboard_up(SDL_Event *e)
 {
-	if(e->key.keysym.sym == 'a' ||
-	   e->key.keysym.sym == 'd')
+	switch(e->key.keysym.sym)
 	{
-		player->move(0);
+		case 'a':
+			a_pressed = 0;
+			break;
+		case 'd':
+			d_pressed = 0;
+			break;
+		case ' ':
+		case 's':
+			s_pressed = 0;
+			break;
 	}
 }
 
@@ -188,6 +199,12 @@ int main(void)
 
 		// update
 		float frametime = window->update();
+
+		if(a_pressed) player->move(-1);
+		else if(d_pressed) player->move(1);
+		else player->move(0);
+		if(s_pressed) player->jump(2);
+
 		player->update(frametime*0.005, chunks);
 		camera->position.x = - player->obj->position.x;
 	}
